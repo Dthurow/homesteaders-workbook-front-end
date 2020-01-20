@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Homesteader's Workbook</title>
+    <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+    <h1>Plants</h1>
+    <h3>Add</h3>
+    <form action="javascript:void(0);" method="POST" onsubmit="addPlant()">
+        <input type="text" id="add-name" placeholder="New Plant name">
+        <input type="text" id="add-description" placeholder="New Description">
+        <input type="submit" value="Add">
+    </form>
+
+    <div id="editForm">
+        <h3>Edit</h3>
+        <form action="javascript:void(0);" onsubmit="updatePlant()">
+            <input type="hidden" id="edit-id">
+            <input type="text" id="edit-name">
+            <input type="text" id="edit-description">
+            <input type="submit" value="Save">
+            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+        </form>
+    </div>
+
+    <p id="counter"></p>
+
+    <table class="displayContent">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tbody id="plants"></tbody>
+    </table>
+
+    <script src="site.js"></script>
+    <script type="text/javascript">
+        getPlants();
+    </script>
+</body>
+</html>
