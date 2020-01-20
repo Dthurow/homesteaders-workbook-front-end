@@ -6,16 +6,15 @@
     <link rel="stylesheet" href="site.css" />
 </head>
 <body>
-    <h1>Plants</h1>
+    <h1>Garden</h1>
+    <h2 id="GardenName"></h2>
     <div class="headerBar">
         <a href="plants.html">Plants</a>
         <a href="gardens.html">Gardens</a>
     </div>
     <h3>Add</h3>
-    <form action="javascript:void(0);" id="AddForm" method="POST" onsubmit="addItem()">
-        <input type="text" id="add-name" name="name" placeholder="New Plant name">
-        <input type="text" id="add-description" name="description" placeholder="New Description">
-        <input type="submit" value="Add">
+    <form action="javascript:void(0);" id="AddForm" method="POST" >
+       TODO
     </form>
 
     <div id="editForm">
@@ -23,7 +22,6 @@
         <form action="javascript:void(0);" id="EditForm" onsubmit="updateItem()">
             <input type="hidden" name="ID" id="edit-id">
             <input type="text" name="name" id="edit-name">
-            <input type="text" name="description" id="edit-description">
             <input type="submit" value="Save">
             <a onclick="closeInput()" aria-label="Close">&#10006;</a>
         </form>
@@ -34,15 +32,14 @@
     <table class="displayContent">
         <tr>
             <th>Name</th>
-            <th>Description</th>
             <th></th>
             <th></th>
         </tr>
-        <tbody id="plants"></tbody>
+        <tbody id="gardenplants"></tbody>
     </table>
 
     <script src="site.js"></script>
-    <script src="plantsdisplay.js"></script>
+    <script src="gardendisplay.js"></script>
     <script type="text/javascript">
         getContent();
     </script>

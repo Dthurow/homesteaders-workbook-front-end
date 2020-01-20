@@ -1,21 +1,22 @@
-const uri = 'https://localhost:5001/api/plants';
-let plants = [];
+let uri = '';
 
-function getPlants() {
-  fetch(uri)
-    .then(response => response.json())
-    .then(data => _displayPlants(data))
-    .catch(error => console.error('Unable to get plants.', error));
+function getContent()
+{
+  console.log('accessing base getContent, not overriden version');
 }
 
-function addPlant() {
-  const addNameTextbox = document.getElementById('add-name');
-  const addDescriptionTextbox = document.getElementById('add-description');
-
-  const plant = {
-    name: addNameTextbox.value.trim(),
-    description: addDescriptionTextbox.value.trim()
-  };
+function addItem()
+{
+  const addFormObj = document.getElementById('AddForm');
+  let addedObject = {};
+  for (let i = 0; i < addFormObj.elements.length; i++)
+  {
+    let curElement = addFormObj.elements[i];
+    if (curElement["type"] === "text")
+    {
+      addedObject[curElement["name"]] = curElement["value"];
+    }
+  }
 
   fetch(uri, {
     method: 'POST',
@@ -23,102 +24,64 @@ function addPlant() {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(plant)
+    body: JSON.stringify(addedObject)
   })
     .then(response => response.json())
-    .then(() => {
-      getPlants();
-      addNameTextbox.value = '';
-      addDescriptionTextbox.value = '';
+    .then(() =>
+    {
+      getContent();
+      for (let i = 0; i < addFormObj.elements.length; i++)
+      {
+        let curElement = addFormObj.elements[i];
+        if (curElement["type"] === "text")
+        {
+          curElement["value"] = "";
+        }
+      }
     })
-    .catch(error => console.error('Unable to add plant.', error));
+    .catch(error => console.error('Unable to add item.', error));
 }
 
-function deletePlant(id) {
+function deleteItem(id)
+{
   fetch(`${uri}/${id}`, {
     method: 'DELETE'
   })
-  .then(() => getPlants())
-  .catch(error => console.error('Unable to delete plant.', error));
+    .then(() => getContent())
+    .catch(error => console.error('Unable to delete item.', error));
 }
 
-function displayEditForm(id) {
-  const plant = plants.find(plant => plant.id === id);
-  
-  document.getElementById('edit-name').value = plant.name;
-  document.getElementById('edit-id').value = plant.id;
-  document.getElementById('edit-description').value = plant.description;
-  document.getElementById('editForm').style.display = 'block';
-}
+function updateItem()
+{
 
-function updatePlant() {
-  const plantId = document.getElementById('edit-id').value;
-  const plant = {
-    id: parseInt(plantId, 10),
-    description: document.getElementById('edit-description').value.trim(),
-    name: document.getElementById('edit-name').value.trim()
-  };
+  const editFormObj = document.getElementById('EditForm');
+  let editedObject = {};
+  for (let i = 0; i < editFormObj.elements.length; i++)
+  {
+    let curElement = editFormObj.elements[i];
+    if (curElement["type"] === "text" || curElement["type"] === "hidden")
+    {
+      editedObject[curElement["name"]] = curElement["value"];
+    }
+  }
 
-  fetch(`${uri}/${plantId}`, {
+  fetch(`${uri}/${editedObject.ID}`, {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(plant)
+    body: JSON.stringify(editedObject)
   })
-  .then(() => getPlants())
-  .catch(error => console.error('Unable to update plant.', error));
+    .then(() => getContent())
+    .catch(error => console.error('Unable to update item.', error));
 
   closeInput();
 
   return false;
 }
 
-function closeInput() {
+function closeInput()
+{
   document.getElementById('editForm').style.display = 'none';
-}
-
-function _displayCount(plantCount) {
-  const name = (plantCount === 1) ? 'plant' : 'plants';
-
-  document.getElementById('counter').innerText = `${plantCount} ${name}`;
-}
-
-function _displayPlants(data) {
-  const tBody = document.getElementById('plants');
-  tBody.innerHTML = '';
-
-  _displayCount(data.length);
-
-  const button = document.createElement('button');
-
-  data.forEach(plant => {
-
-    let editButton = button.cloneNode(false);
-    editButton.innerText = 'Edit';
-    editButton.setAttribute('onclick', `displayEditForm(${plant.id})`);
-
-    let deleteButton = button.cloneNode(false);
-    deleteButton.innerText = 'Delete';
-    deleteButton.setAttribute('onclick', `deletePlant(${plant.id})`);
-
-    let tr = tBody.insertRow();
-    
-    let td1 = tr.insertCell(0);
-    let textNode = document.createTextNode(plant.name);
-    td1.appendChild(textNode);
-
-    let td2 = tr.insertCell(1);
-    let descriptionNode = document.createTextNode(plant.description);
-    td2.appendChild(descriptionNode);
-
-    let td3 = tr.insertCell(2);
-    td3.appendChild(editButton);
-
-    let td4 = tr.insertCell(3);
-    td4.appendChild(deleteButton);
-  });
-
-  plants = data;
 }
