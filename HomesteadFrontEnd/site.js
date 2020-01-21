@@ -12,10 +12,11 @@ function addItem()
   for (let i = 0; i < addFormObj.elements.length; i++)
   {
     let curElement = addFormObj.elements[i];
-    if (curElement["type"] === "text")
+    if (curElement["name"] !== null && curElement["name"] !== "")
     {
       addedObject[curElement["name"]] = curElement["value"];
     }
+
   }
 
   fetch(uri, {
@@ -33,7 +34,7 @@ function addItem()
       for (let i = 0; i < addFormObj.elements.length; i++)
       {
         let curElement = addFormObj.elements[i];
-        if (curElement["type"] === "text")
+        if (curElement["name"] !== null && curElement["name"] !== "")
         {
           curElement["value"] = "";
         }
@@ -59,10 +60,11 @@ function updateItem()
   for (let i = 0; i < editFormObj.elements.length; i++)
   {
     let curElement = editFormObj.elements[i];
-    if (curElement["type"] === "text" || curElement["type"] === "hidden")
+    if (curElement["name"] !== null && curElement["name"] !== "")
     {
       editedObject[curElement["name"]] = curElement["value"];
     }
+
   }
 
   fetch(`${uri}/${editedObject.ID}`, {

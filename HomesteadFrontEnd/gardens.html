@@ -14,6 +14,8 @@
     <h3>Add</h3>
     <form action="javascript:void(0);" id="AddForm" method="POST" onsubmit="addItem()">
         <input type="text" id="add-name" name="name" placeholder="New Garden name">
+        <input type="date" name="growingSeasonStartDate" id="add-growingSeasonStartDate">
+        <input type="date" name="growingSeasonEndDate" id="add-growingSeasonEndDate">
         <input type="submit" value="Add">
     </form>
 
@@ -22,6 +24,8 @@
         <form action="javascript:void(0);" id="EditForm" onsubmit="updateItem()">
             <input type="hidden" name="ID" id="edit-id">
             <input type="text" name="name" id="edit-name">
+            <input type="date" name="growingSeasonStartDate" id="edit-growingSeasonStartDate">
+            <input type="date" name="growingSeasonEndDate" id="edit-growingSeasonEndDate">
             <input type="submit" value="Save">
             <a onclick="closeInput()" aria-label="Close">&#10006;</a>
         </form>
@@ -32,6 +36,8 @@
     <table class="displayContent">
         <tr>
             <th>Name</th>
+            <th>Growing Start</th>
+            <th>Growning End</th>
             <th></th>
             <th></th>
         </tr>

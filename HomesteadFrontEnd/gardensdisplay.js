@@ -15,6 +15,8 @@ function displayEditForm(id)
 
   document.getElementById('edit-name').value = garden.name;
   document.getElementById('edit-id').value = garden.id;
+  document.getElementById('edit-growingSeasonStartDate').value = new Date(garden.growingSeasonStartDate).toISOString().split('T')[0];
+  document.getElementById('edit-growingSeasonEndDate').value = new Date(garden.growingSeasonEndDate).toISOString().split('T')[0];
   document.getElementById('editForm').style.display = 'block';
 }
 
@@ -36,7 +38,7 @@ function _displayGardens(data)
 
   data.forEach(garden =>
   {
-
+    let tdArray = [];
     let editButton = button.cloneNode(false);
     editButton.innerText = 'Edit';
     editButton.setAttribute('onclick', `displayEditForm(${garden.id})`);
@@ -45,20 +47,26 @@ function _displayGardens(data)
     deleteButton.innerText = 'Delete';
     deleteButton.setAttribute('onclick', `deleteItem(${garden.id})`);
 
-    let tr = tBody.insertRow();
-
-    let td1 = tr.insertCell(0);
     let gardenLink = document.createElement("a");
     gardenLink.href = "garden.html?ID=" + garden.id;
     gardenLink.innerText = garden.name;
-    td1.appendChild(gardenLink);
+
+    
+
+    tdArray.push(gardenLink);
+    tdArray.push(document.createTextNode(new Date(garden.growingSeasonStartDate).toDateString()));
+    tdArray.push(document.createTextNode(new Date(garden.growingSeasonEndDate).toDateString()));
+    tdArray.push(editButton);
+    tdArray.push(deleteButton);
 
 
-    let td2 = tr.insertCell(1);
-    td2.appendChild(editButton);
+    let tr = tBody.insertRow();
 
-    let td3 = tr.insertCell(2);
-    td3.appendChild(deleteButton);
+    for (let i = 0; i < tdArray.length; i++)
+    {
+      tr.insertCell(i).appendChild(tdArray[i]);
+    }
+
   });
 
   gardens = data;

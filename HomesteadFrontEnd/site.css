@@ -16,11 +16,11 @@ body{
     padding-left:10px;
 }
 
-#editForm{
+#editForm, #plantSearchTable{
     display:none;
 }
 
-button, input[type=submit] {
+button, input[type=submit], input[type=button] {
     border-radius: 2px;
     box-shadow: none;
     border-style: none;
