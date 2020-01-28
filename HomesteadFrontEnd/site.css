@@ -16,7 +16,7 @@ body{
     padding-left:10px;
 }
 
-#editForm, #plantSearchTable{
+#plantSearchTable{
     display:none;
 }
 
