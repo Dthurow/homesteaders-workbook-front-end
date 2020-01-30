@@ -16,6 +16,12 @@ body{
     padding-left:10px;
 }
 
+input[type=text], input[type=date]{
+    display:block;
+    margin-right:10px;
+    margin-bottom: 10px;
+}
+
 #plantSearchTable{
     display:none;
 }

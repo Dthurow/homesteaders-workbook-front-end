@@ -9,6 +9,7 @@ List of functionality this website supports.
 
 #### Garden Planning
 * add/edit/delete plants
+* add/edit/delete gardens
 
 #### Maximizing feeding people
 
@@ -34,8 +35,10 @@ List of functionality this website supports.
 ### Completed
 * Create Git Repo
 * Create readme with functionality list and tech TO-DOs
+* created functional webpack and package config files, use npm/webpack to transpile Vue to javascript
+* transfered home, gardens, and plants pages to VueJS equivalant
 
 
 ### Need to be done
-* create server side code to serve up static files
-* look into adding non-vanilla js to website (jquery, vueJS)
+* create server side code to serve up static files (nodejs express?)
+* Complete transfer to VueJS site
