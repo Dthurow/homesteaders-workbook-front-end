@@ -38,7 +38,7 @@
     </form>
     <div id="editForm" v-if="editGarden != null">
       <h3>Edit</h3>
-      <form id="EditForm" onsubmit="updateItem()">
+      <form id="EditForm" >
         <input type="hidden" name="ID" v-model="editGarden.id" id="edit-id" />
         <input type="text" name="name" v-model="editGarden.name" id="edit-name" />
         <input type="button" value="Save" v-on:click="saveEdit(editGarden)" />
@@ -58,7 +58,10 @@
       </tr>
       <tbody>
         <tr v-for="garden in gardens" v-bind:key="garden.id">
-          <td>{{garden.name}}</td>
+          <td>
+
+                <router-link v-bind:to="'/garden/' + garden.id">{{garden.name}}</router-link>
+          </td>
           <td> {{garden.growingSeasonStartDate}}</td>
           <td> {{garden.growingSeasonEndDate}}</td>
           <td>
@@ -120,7 +123,7 @@ export default {
       })
         .then(response => response.json())
         .then(savedgarden => {
-          let ind = this.gardens.findIndex(x => x.id == garden.id);
+          let ind = this.gardens.findIndex(x => x.id == savedgarden.id);
           this.gardens[ind] = savedgarden;
           this.editGarden = null;
         })

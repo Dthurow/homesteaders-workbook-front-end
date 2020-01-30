@@ -4,13 +4,15 @@ import App from './App.vue'
 import Plants from './Plants.vue'
 import Gardens from './Gardens.vue'
 import Home from './Home.vue'
+import Garden from './Garden.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   { path: '/', component: Home},
   { path: '/plants', component: Plants },
-  { path: '/gardens', component: Gardens }
+  { path: '/gardens', component: Gardens },
+  { path: '/garden/:id', component: Garden, props: true}
 ]
 
 const router = new VueRouter({
