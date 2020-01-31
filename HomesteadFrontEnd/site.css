@@ -2,12 +2,18 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     max-width: 75%;
     margin: auto;
+    background-color: #EDECE8;
 }
+
+a, b{
+    color: #279935;
+}
+
 
 .headerBar{
     width: 100%;
     padding: 10px;
-    background-color:#a9a9a985;
+    border: 1px solid #606766;
     border-radius: 10px;
 }
 
@@ -37,21 +43,24 @@ button, input[type=submit], input[type=button] {
 }
 
 .displayContent{
-    border: solid black 1px;
-    border-radius: 8px;
     border-spacing: 0px;
     min-width: 100%;
+    border: 1px solid #87A495;
+    border-radius: 8px;;
 }
 
 .displayContent th{
     padding:10px;
     text-align: left;
+    border-bottom: 1px solid #87A495;
 }
+
 
 .displayContent td{
     padding:10px;
 }
 
 .displayContent tr:nth-child(even){
-    background-color: bisque;
+    background-color: #87A495;
+    color:#EDECE8;
 }

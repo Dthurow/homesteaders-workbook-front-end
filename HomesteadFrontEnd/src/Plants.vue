@@ -1,6 +1,9 @@
 <template>
   <div id="plants">
     <h2>Plants</h2>
+    <p>
+      A collection of all plants currently stored in the homesteader's workbook. Feel free to peruse. 
+      </p>
     <hr/>
     <h3>Add</h3>
     <form id="AddForm">
@@ -72,7 +75,7 @@ export default {
       editPlant: null,
       addPlant: {},
       errorMessage: ""
-    };
+    }
   },
   computed: {
     counterText: function() {
@@ -154,7 +157,7 @@ export default {
   created: function() {
     this.GetContent();
   }
-};
+}
 </script>
 
 <style>
