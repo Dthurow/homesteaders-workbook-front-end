@@ -73,13 +73,14 @@
 </template>
 
 <script>
+import {config} from './js/config';
 export default {
   name: "garden",
   data() {
     return {
-      uri: "https://localhost:5001/api/gardens",
-      gardenPlantURI: "https://localhost:5001/api/gardenplants",
-      allPlantURI: "https://localhost:5001/api/plants",
+      uri: config.apiURL +"/api/gardens",
+      gardenPlantURI: config.apiURL +"/api/gardenplants",
+      allPlantURI: config.apiURL +"/api/plants",
       errorMessage: "",
       gardenPlants: {},
       allPlants: {},

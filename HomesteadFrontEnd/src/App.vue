@@ -7,6 +7,7 @@
     <router-link to="/plants">Plants</router-link>
     <router-link to="/gardens">Gardens</router-link>
   </div>
+
   <!-- route outlet -->
   <!-- component matched by the route will render here -->
   <router-view></router-view>
@@ -14,6 +15,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'app'
 }

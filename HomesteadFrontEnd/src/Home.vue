@@ -19,13 +19,14 @@
             This means a lot of the functionality is only partially implemented, or not implemented at all!
             Feel free to poke around, but remember, all design and functionality is still subject to change!
         </p>
-
 </div>
 </template>
 
 <script>
+
 export default {
   name: 'home'
+    
 }
 </script>
 

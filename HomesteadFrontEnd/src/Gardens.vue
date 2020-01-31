@@ -1,12 +1,10 @@
 <template>
   <div id="gardens">
     <h2>Gardens</h2>
-    <hr/>
+    <hr />
     <h3>Add</h3>
     <form id="AddForm">
-        <label for="add-name">
-            Garden Name
-        </label>
+      <label for="add-name">Garden Name</label>
       <input
         type="text"
         id="add-name"
@@ -14,9 +12,7 @@
         name="name"
         placeholder="New garden name"
       />
-       <label for="add-growing-start-date">
-          Growing Season Start Date (approximate)
-      </label>
+      <label for="add-growing-start-date">Growing Season Start Date (approximate)</label>
       <input
         type="date"
         id="add-growing-start-date"
@@ -24,10 +20,8 @@
         name="growingSeasonStartDate"
         placeholder="Growing Season Start Date"
       />
-      <label for="add-growing-end-date">
-          Growing Season End Date (approximate)
-      </label>
-       <input
+      <label for="add-growing-end-date">Growing Season End Date (approximate)</label>
+      <input
         type="date"
         id="add-growing-end-date"
         v-model="addGarden.growingSeasonEndDate"
@@ -38,7 +32,7 @@
     </form>
     <div id="editForm" v-if="editGarden != null">
       <h3>Edit</h3>
-      <form id="EditForm" >
+      <form id="EditForm">
         <input type="hidden" name="ID" v-model="editGarden.id" id="edit-id" />
         <input type="text" name="name" v-model="editGarden.name" id="edit-name" />
         <input type="button" value="Save" v-on:click="saveEdit(editGarden)" />
@@ -59,11 +53,10 @@
       <tbody>
         <tr v-for="garden in gardens" v-bind:key="garden.id">
           <td>
-
-                <router-link v-bind:to="'/garden/' + garden.id">{{garden.name}}</router-link>
+            <router-link v-bind:to="'/garden/' + garden.id">{{garden.name}}</router-link>
           </td>
-          <td> {{garden.growingSeasonStartDate}}</td>
-          <td> {{garden.growingSeasonEndDate}}</td>
+          <td>{{garden.growingSeasonStartDate}}</td>
+          <td>{{garden.growingSeasonEndDate}}</td>
           <td>
             <button v-on:click="displayEditForm(garden)">Edit</button>
           </td>
@@ -77,12 +70,13 @@
 </template>
 
 <script>
+import { config } from "./js/config";
 export default {
   name: "gardens",
   data() {
     return {
       gardens: {},
-      uri: "https://localhost:5001/api/gardens",
+      uri: config.apiURL + "/api/gardens",
       editGarden: null,
       addGarden: {},
       errorMessage: ""
