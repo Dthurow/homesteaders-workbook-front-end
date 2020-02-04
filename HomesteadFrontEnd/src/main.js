@@ -5,17 +5,21 @@ import Plants from './Plants.vue'
 import Gardens from './Gardens.vue'
 import Home from './Home.vue'
 import Garden from './Garden.vue'
+import Callback from './Callback.vue'
+import { requireAuth } from './js/auth';
 
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', component: Home},
-  { path: '/plants', component: Plants },
-  { path: '/gardens', component: Gardens },
-  { path: '/garden/:id', component: Garden, props: true}
+  { path: '/plants', component: Plants, beforeEnter: requireAuth, },
+  { path: '/gardens', component: Gardens, beforeEnter: requireAuth, },
+  { path: '/garden/:id', component: Garden, props: true, beforeEnter: requireAuth, },
+  { path: '/callback', component: Callback },
+  { path: '/', component: Home },
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes // short for `routes: routes`
 })
 

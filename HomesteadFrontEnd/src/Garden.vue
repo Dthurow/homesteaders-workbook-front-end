@@ -74,6 +74,7 @@
 
 <script>
 import {config} from './js/config';
+import { getAccessToken } from './js/auth';
 export default {
   name: "garden",
   data() {
@@ -103,7 +104,11 @@ export default {
   },
   methods: {
     GetContent: function() {
-      fetch(this.uri + "/" + this.id)
+      fetch(this.uri + "/" + this.id,{
+         headers:{
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
         .then(response => response.json())
         .then(data => {
           console.log(data);
@@ -113,7 +118,11 @@ export default {
       this.GetPlants();
     },
     GetPlants: function() {
-      fetch(this.allPlantURI)
+      fetch(this.allPlantURI, {
+         headers:{
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
         .then(response => response.json())
         .then(data => {
           this.allPlants = data;
@@ -171,7 +180,8 @@ export default {
           method: "POST",
           headers: {
             Accept: "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getAccessToken()}`
           },
           body: JSON.stringify(gardenPlant)
         })
@@ -186,7 +196,10 @@ export default {
     },
     deleteGardenPlant: function(id) {
       fetch(`${this.gardenPlantURI}/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers:{
+          Authorization: `Bearer ${getAccessToken()}`
+        }
       })
         .then(response => {
           if (!response.ok) {

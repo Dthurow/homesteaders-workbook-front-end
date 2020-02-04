@@ -65,6 +65,7 @@
 
 <script>
 import { config } from "./js/config";
+import { getAccessToken } from './js/auth';
 export default {
   name: "plants",
   data() {
@@ -85,7 +86,11 @@ export default {
   },
   methods: {
     GetContent: function() {
-      fetch(this.uri)
+      fetch(this.uri, {
+        headers:{
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
         .then(response => response.json())
         .then(data => {
           console.log(data);
@@ -104,7 +109,8 @@ export default {
         method: "PUT",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAccessToken()}`
         },
         body: JSON.stringify(plant)
       })
@@ -121,7 +127,8 @@ export default {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAccessToken()}`
         },
         body: JSON.stringify(plant)
       })
@@ -134,7 +141,10 @@ export default {
     },
     deletePlant: function(id) {
       fetch(`${this.uri}/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers:{
+          Authorization: `Bearer ${getAccessToken()}`
+        }
       })
         .then(response => {
           if (!response.ok) {
