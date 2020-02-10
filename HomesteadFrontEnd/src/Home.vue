@@ -1,7 +1,7 @@
 <template>
  <div id="home">
  
-        <p>Welcome to the homesteader's workbook, your one-stop shop to design, build, and plan your homstead.</p>
+        <p>Welcome to the homesteader's workbook, your one-stop shop to design, build, and plan your homestead.</p>
         <p>The sort of functionality this website has:</p>
         <ul>
             <li>Organize which gardens will have which plants</li>

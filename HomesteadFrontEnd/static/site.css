@@ -9,6 +9,9 @@ a, b{
     color: #279935;
 }
 
+.errorMessage{
+    color: red;
+}
 
 .headerBar{
     width: 100%;

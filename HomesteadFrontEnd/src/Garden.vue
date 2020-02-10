@@ -1,9 +1,15 @@
 <template>
   <div id="garden">
-    <h2>Garden</h2>
+    <h2>{{garden.name}}</h2>
+    <hr />
+
+    <!-- Garden Info -->
+    <p> Growing season: {{garden.growingSeasonStartDate}} to {{garden.growingSeasonEndDate}} </p>
+    <p> Garden size: {{garden.width}}x{{garden.length}} {{garden.measurementType}} </p>
+
     <hr />
     <!-- Add Form -->
-    <h3>Add</h3>
+    <h3>Add Plant to {{garden.name}}</h3>
     <form id="AddForm">
       <input
         type="text"
@@ -33,7 +39,7 @@
 
     <!--Edit Form -->
     <div id="editForm" v-if="editGardenPlant != null">
-      <h3>Edit</h3>
+      <h3>Edit {{editGardenPlant.name}}</h3>
       <form id="EditForm">
         <input type="hidden" name="ID" v-model="editGardenPlant.id" id="edit-id" />
         <input type="text" name="name" v-model="editGardenPlant.name" id="edit-name" />
@@ -52,6 +58,7 @@
         <th>Name</th>
         <th>Plant Count</th>
         <th>Estimated Yield</th>
+        <th>Actual Yield </th>
         <th></th>
         <th></th>
       </tr>
@@ -59,7 +66,9 @@
         <tr v-for="gardenPlant in gardenPlants" v-bind:key="gardenPlant.id">
           <td>{{gardenPlant.name}}</td>
           <td>{{gardenPlant.count}}</td>
-          <td>{{gardenPlant.yieldEstimated}}</td>
+          <td>{{gardenPlant.yieldEstimated}} {{gardenPlant.plant.yieldType}}</td>
+          <td v-if="gardenPlant.yieldActual != null">{{gardenPlant.yieldActual}} {{gardenPlant.plant.yieldType}}</td>
+          <td v-else> - </td>
           <td>
             <button v-on:click="displayEditForm(gardenPlant)">Edit</button>
           </td>
@@ -88,7 +97,8 @@ export default {
       plantSearchTerm: "",
       searchResultPlants: [],
       editGardenPlant: null,
-      addGardenPlant: null
+      addGardenPlant: null,
+      garden : null
     };
   },
   props: ["id"],
@@ -113,6 +123,7 @@ export default {
         .then(data => {
           console.log(data);
           this.gardenPlants = data.gardenPlants;
+          this.garden = data;
         })
         .catch(error => console.error("Unable to get gardens.", error));
       this.GetPlants();
@@ -130,6 +141,7 @@ export default {
         .catch(error => console.error("Unable to get gardens.", error));
     },
     SearchPlants: function() {
+      this.errorMessage = "";
       if (this.plantSearchTerm != null && this.plantSearchTerm.length > 0) {
         this.searchResultPlants = this.allPlants
           .filter(plant => {
@@ -138,6 +150,10 @@ export default {
               .includes(this.plantSearchTerm.toUpperCase());
           })
           .slice(0, 5);
+          if (this.searchResultPlants.length == 0){
+            this.errorMessage = "That plant does not exist in our system"
+          }
+          
       } else {
         this.searchResultPlants = [];
       }
