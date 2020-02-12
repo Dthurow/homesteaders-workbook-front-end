@@ -6,7 +6,7 @@ const ACCESS_TOKEN_KEY = 'access_token';
 const CLIENT_ID = 'YUVJyEu4uSuUgi3SRNLJaNrfUHBTQUr0';
 const CLIENT_DOMAIN = 'dev-4arbelkb.auth0.com';
 const REDIRECT = 'http://localhost:8080/callback';
-const SCOPE = 'standard_user';
+const SCOPE = 'openid profile email standard_user';
 const AUDIENCE = 'https://my-test-api.com';
 
 var auth = new auth0.WebAuth({
@@ -93,6 +93,12 @@ export function isLoggedIn() {
   }
   
 }
+
+export function getUserData(cb){
+
+  auth.client.userInfo(getAccessToken(), cb);
+}
+
 
 function getTokenExpirationDate(encodedToken) {
   const token = decode(encodedToken);

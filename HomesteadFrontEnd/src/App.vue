@@ -3,10 +3,24 @@
   <h1>Homesteader's Workbook</h1>
   <h3>Homesteading made easy &mdash; well, easier.</h3>
   <div class="headerBar">
-    <router-link to="/">Home</router-link>
-    <router-link to="/plants">Plants</router-link>
-    <router-link to="/gardens">Gardens</router-link>
-    <button class="logoutbutton" v-show="isLoggedIn()" @click="handleLogout()">Log out </button>
+    <div style="flex:1 1 auto;"> 
+      <router-link to="/">Home</router-link>
+      <router-link to="/plants">Plants</router-link>
+      <router-link to="/gardens">Gardens</router-link>
+    </div>
+  <div class="loggedInInfo" v-show="isLoggedIn()">
+     <div class="userInfo" v-if="userInfo != null">
+       <div class="userPic">
+        <img v-if="userInfo.picture != null" v-bind:src="userInfo.picture">
+       </div>
+      {{userInfo.name}}
+    </div>
+    <div>
+        <button class="logoutbutton" @click="handleLogout()">Log out </button>
+    </div>
+  </div>
+
+
   </div>
   <div v-show="!isLoggedIn()" class="specialAlert">
     <b>Want to explore this site?</b>
@@ -25,12 +39,23 @@
 </template>
 
 <script>
-import { isLoggedIn, login, logout } from './js/auth';
+import { isLoggedIn, login, logout, getUserData } from './js/auth';
 export default {
   name: 'app',
+  data() {
+    return{
+      userInfo: null
+    }
+  },
+  created: function (){
+    if (isLoggedIn() && this.userInfo == null){
+      this.getUserData();
+    }
+  },
    methods: {
     handleLogin() {
       login();
+      console.log("after login");
     },
     handleLogout() {
       logout();
@@ -38,6 +63,12 @@ export default {
     isLoggedIn() {
       return isLoggedIn();
     },
+    getUserData(){
+      return getUserData(this.setUserInfo);
+    },
+    setUserInfo(error, user){
+      this.userInfo = user;
+    }
   }
 }
 </script>

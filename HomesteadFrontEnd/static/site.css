@@ -18,11 +18,19 @@ a, b{
     padding: 10px;
     border: 1px solid #606766;
     border-radius: 10px;
+    overflow: auto;
+    display: flex;
+    align-items: center;
 }
 
 .headerBar a{
     text-decoration: none;
     padding-left:10px;
+}
+
+.headerBar div {
+    display:inline-block;
+    vertical-align: middle;
 }
 
 .specialAlert{
@@ -33,9 +41,26 @@ a, b{
     margin: 10px;
 }
 
-.logoutbutton{
-    float:right;
+.userInfo{
+    margin-left:10px;
+    margin-right:10px;
 }
+
+.userPic{
+    width:40px;
+    height:40px;
+    background-color: #EDECE8;
+    border-radius: 50%;
+    overflow: hidden;
+    display:inline-block;
+}
+
+.userPic img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
 
 input[type=text], input[type=date]{
     display:block;
