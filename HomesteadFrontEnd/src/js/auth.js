@@ -94,9 +94,22 @@ export function isLoggedIn() {
   
 }
 
-export function getUserData(cb){
+export function getUserData(){
+  try{
+    const idToken = getIdToken();
+    const token = decode(idToken);
 
-  auth.client.userInfo(getAccessToken(), cb);
+    return {
+      name: token.name,
+      picture: token.picture
+    };
+  }
+  catch(error){
+    console.log("error: " + error);
+    logout();
+    return null;
+  }
+
 }
 
 
