@@ -3,8 +3,9 @@
     <h2>Plants</h2>
     <p>A collection of all plants currently stored in the homesteader's workbook. Feel free to peruse.</p>
     <hr />
-    <h3>Add</h3>
-    <form id="AddForm">
+    
+    <form id="AddForm" v-if="isAdmin()">
+      <h3>Add</h3>
       <input
         type="text"
         id="add-name"
@@ -40,8 +41,8 @@
         <th>Description</th>
         <th>Yield Type</th>
         <th>Plant Group</th>
-        <th></th>
-        <th></th>
+        <th v-if="isAdmin()"></th>
+        <th v-if="isAdmin()"></th>
       </tr>
       <tbody>
         <tr v-for="plant in plants" v-bind:key="plant.id">
@@ -51,10 +52,10 @@
           <td>
             <p v-if="plant.plantGroup !== null">{{plant.plantGroup.name}}</p>
           </td>
-          <td>
+          <td v-if="isAdmin()">
             <button v-on:click="displayEditForm(plant)">Edit</button>
           </td>
-          <td>
+          <td v-if="isAdmin()">
             <button v-on:click="deletePlant(plant.id)">Delete</button>
           </td>
         </tr>
@@ -65,7 +66,7 @@
 
 <script>
 import { config } from "./js/config";
-import { getAccessToken } from './js/auth';
+import { getAccessToken, isAdmin } from './js/auth';
 export default {
   name: "plants",
   data() {
@@ -85,6 +86,9 @@ export default {
     }
   },
   methods: {
+    isAdmin: function(){
+      return isAdmin();
+    },
     GetContent: function() {
       fetch(this.uri, {
         headers:{

@@ -6,7 +6,7 @@ const ACCESS_TOKEN_KEY = 'access_token';
 const CLIENT_ID = 'YUVJyEu4uSuUgi3SRNLJaNrfUHBTQUr0';
 const CLIENT_DOMAIN = 'dev-4arbelkb.auth0.com';
 const REDIRECT = 'http://localhost:8080/callback';
-const SCOPE = 'openid profile email standard_user';
+const SCOPE = 'openid profile email standard_user admin_user';
 const AUDIENCE = 'https://my-test-api.com';
 
 var auth = new auth0.WebAuth({
@@ -14,8 +14,10 @@ var auth = new auth0.WebAuth({
   domain: CLIENT_DOMAIN
 });
 
-export function login() {
-  try{
+export function login()
+{
+  try
+  {
     auth.authorize({
       responseType: 'token id_token',
       redirectUri: REDIRECT,
@@ -23,79 +25,96 @@ export function login() {
       scope: SCOPE
     });
   }
-  catch(error){
+  catch (error)
+  {
     console.log("error" + error);
   }
-  
+
 }
 
 
-export function logout() {
+export function logout()
+{
   clearIdToken();
   clearAccessToken();
   window.location.href = '/';
 }
 
-export function requireAuth(to, from, next) {
-  if (!isLoggedIn()) {
+export function requireAuth(to, from, next)
+{
+  if (!isLoggedIn())
+  {
     next({
       path: '/',
       query: { redirect: to.fullPath }
     });
-  } else {
+  } else
+  {
     next();
   }
 }
 
-export function getIdToken() {
+export function getIdToken()
+{
   return localStorage.getItem(ID_TOKEN_KEY);
 }
 
-export function getAccessToken() {
+export function getAccessToken()
+{
   return localStorage.getItem(ACCESS_TOKEN_KEY);
 }
 
-function clearIdToken() {
+function clearIdToken()
+{
   localStorage.removeItem(ID_TOKEN_KEY);
 }
 
-function clearAccessToken() {
+function clearAccessToken()
+{
   localStorage.removeItem(ACCESS_TOKEN_KEY);
 }
 
 // Helper function that will allow us to extract the access_token and id_token
-function getParameterByName(name) {
+function getParameterByName(name)
+{
   let match = RegExp('[#&]' + name + '=([^&]*)').exec(window.location.hash);
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
 // Get and store access_token in local storage
-export function setAccessToken() {
+export function setAccessToken()
+{
   let accessToken = getParameterByName('access_token');
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
 }
 
 // Get and store id_token in local storage
-export function setIdToken() {
+export function setIdToken()
+{
   let idToken = getParameterByName('id_token');
   localStorage.setItem(ID_TOKEN_KEY, idToken);
 }
 
-export function isLoggedIn() {
-  try{
+export function isLoggedIn()
+{
+  try
+  {
     const idToken = getIdToken();
     return !!idToken && !isTokenExpired(idToken);
   }
-  catch(error){
+  catch (error)
+  {
     console.log("error: " + error);
-   logout();
+    logout();
     return false;
   }
-  
+
 }
 
-export function getUserData(){
-  try{
+export function getUserData()
+{
+  try
+  {
     const idToken = getIdToken();
     const token = decode(idToken);
 
@@ -104,7 +123,8 @@ export function getUserData(){
       picture: token.picture
     };
   }
-  catch(error){
+  catch (error)
+  {
     console.log("error: " + error);
     logout();
     return null;
@@ -112,8 +132,19 @@ export function getUserData(){
 
 }
 
+export function isAdmin()
+{
+  const accessToken = getAccessToken();
+  const token = decode(accessToken);
+  console.log(token);
 
-function getTokenExpirationDate(encodedToken) {
+  return token.permissions.indexOf("admin_user") > -1
+
+}
+
+
+function getTokenExpirationDate(encodedToken)
+{
   const token = decode(encodedToken);
   if (!token.exp) { return null; }
 
@@ -123,7 +154,8 @@ function getTokenExpirationDate(encodedToken) {
   return date;
 }
 
-function isTokenExpired(token) {
+function isTokenExpired(token)
+{
   const expirationDate = getTokenExpirationDate(token);
   return expirationDate < new Date();
 }

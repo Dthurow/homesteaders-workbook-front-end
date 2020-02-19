@@ -169,7 +169,8 @@ export default {
         method: "PUT",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAccessToken()}`
         },
         body: JSON.stringify(personPlant)
       })
