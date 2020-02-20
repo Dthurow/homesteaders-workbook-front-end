@@ -1,54 +1,37 @@
 <template>
   <div id="garden">
-    <h2>{{garden.name}}</h2>
+    <h2>{{garden == null ? "Garden" : garden.name}}</h2>
     <hr />
 
     <!-- Garden Info -->
-    <p> Growing season: {{garden.growingSeasonStartDate}} to {{garden.growingSeasonEndDate}} </p>
-    <p> Garden size: {{garden.width}}x{{garden.length}} {{garden.measurementType}} </p>
+    <div v-if="garden != null">
+      <p>Growing season: {{garden.growingSeasonStartDate}} to {{garden.growingSeasonEndDate}}</p>
+      <p>Garden size: {{garden.width}}x{{garden.length}} {{garden.measurementType}}</p>
+    </div>
 
     <hr />
     <!-- Add Form -->
-    <h3>Add Plant to {{garden.name}}</h3>
+    <h3>Add Plant to {{garden == null ? "Garden" : garden.name}}</h3>
     <form id="AddForm">
-      <input
-        type="text"
-        v-model="plantSearchTerm"
-        placeholder="Plant Name"
-        v-on:keyup="SearchPlants"
-      />
+      <searchPlantsComponent v-on:select-new-plant="selectNewPlant"></searchPlantsComponent>
 
-      <table
-        v-if="plantSearchTerm != '' && searchResultPlants != null && searchResultPlants.length > 0"
-      >
-        <tr v-for="plant in searchResultPlants" v-bind:key="plant.id">
-          <td>{{plant.name}}</td>
-          <td>
-            <input type="button" value="Select" v-on:click="selectNewPlant(plant)" />
-          </td>
-        </tr>
-      </table>
       <div v-if="addGardenPlant != null">
         <p>{{addGardenPlant.name}}</p>
         <input type="text" placeholder="Plant Count" v-model="addGardenPlant.count" />
         <input type="text" placeholder="Estimated Yield" v-model="addGardenPlant.yieldEstimated" />
+        <input type="text" disabled v-model="addGardenPlant.plant.yieldType" />
       </div>
 
       <input type="button" value="Add" v-on:click="saveNew(addGardenPlant)" />
     </form>
 
     <!--Edit Form -->
-    <div id="editForm" v-if="editGardenPlant != null">
-      <h3>Edit {{editGardenPlant.name}}</h3>
-      <form id="EditForm">
-        <input type="hidden" name="ID" v-model="editGardenPlant.id" id="edit-id" />
-        <input type="text" name="name" v-model="editGardenPlant.name" id="edit-name" />
-        <input type="text" name="count" v-model="editGardenPlant.count" />
-        <input type="text" name="estimatedyield" v-model="editGardenPlant.yieldEstimated" />
-        <input type="button" value="Save" v-on:click="saveEdit(editGardenPlant)" />
-        <a v-on:click="editGardenPlant = null" aria-label="Close">&#10006;</a>
-      </form>
-    </div>
+    <editComponent
+      v-bind:save-edit-url="editGardenPlant != null ? gardenPlantURI + '/' + editGardenPlant.id : ''"
+      v-bind:edit-item="editGardenPlant"
+      v-on:save-edit-return="saveEditReturn"
+      v-on:close-edit="editGardenPlant = null"
+    ></editComponent>
 
     <!-- Display Table -->
     <p class="errorMessage" v-if="errorMessage">{{errorMessage}}</p>
@@ -58,7 +41,7 @@
         <th>Name</th>
         <th>Plant Count</th>
         <th>Estimated Yield</th>
-        <th>Actual Yield </th>
+        <th>Actual Yield</th>
         <th></th>
         <th></th>
       </tr>
@@ -67,8 +50,10 @@
           <td>{{gardenPlant.name}}</td>
           <td>{{gardenPlant.count}}</td>
           <td>{{gardenPlant.yieldEstimated}} {{gardenPlant.plant.yieldType}}</td>
-          <td v-if="gardenPlant.yieldActual != null">{{gardenPlant.yieldActual}} {{gardenPlant.plant.yieldType}}</td>
-          <td v-else> - </td>
+          <td
+            v-if="gardenPlant.yieldActual != null"
+          >{{gardenPlant.yieldActual}} {{gardenPlant.plant.yieldType}}</td>
+          <td v-else>-</td>
           <td>
             <button v-on:click="displayEditForm(gardenPlant)">Edit</button>
           </td>
@@ -82,23 +67,26 @@
 </template>
 
 <script>
-import {config} from './js/config';
-import { getAccessToken } from './js/auth';
+import { config } from "./js/config";
+import { getAccessToken } from "./js/auth";
+import searchPlantsComponent from "./components/searchPlantsComponent";
+import editComponent from "./components/editComponent";
+
 export default {
+  components: {
+    searchPlantsComponent,
+    editComponent
+  },
   name: "garden",
   data() {
     return {
-      uri: config.apiURL +"/api/gardens",
-      gardenPlantURI: config.apiURL +"/api/gardenplants",
-      allPlantURI: config.apiURL +"/api/plants",
+      uri: config.apiURL + "/api/gardens",
+      gardenPlantURI: config.apiURL + "/api/gardenplants",
       errorMessage: "",
       gardenPlants: {},
-      allPlants: {},
-      plantSearchTerm: "",
-      searchResultPlants: [],
       editGardenPlant: null,
       addGardenPlant: null,
-      garden : null
+      garden: null
     };
   },
   props: ["id"],
@@ -114,8 +102,8 @@ export default {
   },
   methods: {
     GetContent: function() {
-      fetch(this.uri + "/" + this.id,{
-         headers:{
+      fetch(this.uri + "/" + this.id, {
+        headers: {
           Authorization: `Bearer ${getAccessToken()}`
         }
       })
@@ -126,70 +114,46 @@ export default {
           this.garden = data;
         })
         .catch(error => console.error("Unable to get gardens.", error));
-      this.GetPlants();
     },
-    GetPlants: function() {
-      fetch(this.allPlantURI, {
-         headers:{
-          Authorization: `Bearer ${getAccessToken()}`
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          this.allPlants = data;
-        })
-        .catch(error => console.error("Unable to get gardens.", error));
-    },
-    SearchPlants: function() {
-      this.errorMessage = "";
-      if (this.plantSearchTerm != null && this.plantSearchTerm.length > 0) {
-        this.searchResultPlants = this.allPlants
-          .filter(plant => {
-            return plant.name
-              .toUpperCase()
-              .includes(this.plantSearchTerm.toUpperCase());
-          })
-          .slice(0, 5);
-          if (this.searchResultPlants.length == 0){
-            this.errorMessage = "That plant does not exist in our system"
-          }
-          
-      } else {
-        this.searchResultPlants = [];
-      }
-    },
+
     selectNewPlant: function(plant) {
       this.addGardenPlant = {};
       this.addGardenPlant.plantID = plant.id;
       this.addGardenPlant.name = plant.name;
       this.addGardenPlant.gardenId = this.id;
+      this.addGardenPlant.plant = plant;
     },
     displayEditForm: function(data) {
       this.editGardenPlant = {};
-      this.editGardenPlant.name = data.name;
-      this.editGardenPlant.count = data.count;
-      this.editGardenPlant.yieldEstimated = data.yieldEstimated;
       this.editGardenPlant.id = data.id;
+      this.editGardenPlant.values = [];
+
+      for (var key in data) {
+        if (
+          typeof data[key] != "object" &&
+          key != "id" &&
+          !key.endsWith("ID")
+        ) {
+          var kvp = {};
+          kvp["name"] = key;
+          kvp["propName"] = key;
+          kvp["value"] = data[key];
+          kvp["type"] = "text";
+
+          switch (key) {
+            case "name": {
+              kvp["required"] = true;
+              break;
+            }
+          }
+          this.editGardenPlant.values.push(kvp);
+        }
+      }
     },
-    saveEdit: function(gardenPlant) {
-      fetch(this.gardenPlantURI + "/" + gardenPlant.id, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getAccessToken()}`
-        },
-        body: JSON.stringify(gardenPlant)
-      })
-        .then(response => response.json())
-        .then(savedGardenPlant => {
-          let ind = this.gardenPlants.findIndex(
-            x => x.id == savedGardenPlant.id
-          );
-          this.gardenPlants[ind] = savedGardenPlant;
-          this.editGardenPlant = null;
-        })
-        .catch(error => console.error("Unable to update item.", error));
+    saveEditReturn: function(savedGardenPlant) {
+      let ind = this.gardenPlants.findIndex(x => x.id == savedGardenPlant.id);
+      this.gardenPlants[ind] = savedGardenPlant;
+      this.editGardenPlant = null;
     },
     saveNew: function(gardenPlant) {
       if (gardenPlant != null) {
@@ -204,7 +168,7 @@ export default {
         })
           .then(response => response.json())
           .then(savedGardenPlant => {
-            this.gardenPlants.push(savedGardenPlant);
+            this.gardenPlants.push(gardenPlant);
             this.addGardenPlant = null;
             this.plantSearchTerm = "";
           })
@@ -214,7 +178,7 @@ export default {
     deleteGardenPlant: function(id) {
       fetch(`${this.gardenPlantURI}/${id}`, {
         method: "DELETE",
-        headers:{
+        headers: {
           Authorization: `Bearer ${getAccessToken()}`
         }
       })

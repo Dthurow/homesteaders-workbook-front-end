@@ -104,9 +104,9 @@ export default {
     },
     displayEditForm: function(data) {
       this.editPlant = {};
-      this.editPlant.name = data.name;
-      this.editPlant.description = data.description;
-      this.editPlant.id = data.id;
+       for (var key in data){
+        this.editPlant[key] = data[key];
+      }
     },
     saveEdit: function(plant) {
       fetch(this.uri + "/" + plant.id, {

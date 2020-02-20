@@ -136,7 +136,6 @@ export function isAdmin()
 {
   const accessToken = getAccessToken();
   const token = decode(accessToken);
-  console.log(token);
 
   return token.permissions.indexOf("admin_user") > -1
 
