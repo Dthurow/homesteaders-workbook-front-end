@@ -4,7 +4,7 @@
     <p>A collection of all plants currently stored in the homesteader's workbook. Feel free to peruse.</p>
     <hr />
     
-    <form id="AddForm" v-if="isAdmin()">
+    <form id="AddForm">
       <h3>Add</h3>
       <input
         type="text"
@@ -41,8 +41,8 @@
         <th>Description</th>
         <th>Yield Type</th>
         <th>Plant Group</th>
-        <th v-if="isAdmin()"></th>
-        <th v-if="isAdmin()"></th>
+        <th ></th>
+        <th ></th>
       </tr>
       <tbody>
         <tr v-for="plant in plants" v-bind:key="plant.id">
@@ -52,10 +52,10 @@
           <td>
             <p v-if="plant.plantGroup !== null">{{plant.plantGroup.name}}</p>
           </td>
-          <td v-if="isAdmin()">
+          <td >
             <button v-on:click="displayEditForm(plant)">Edit</button>
           </td>
-          <td v-if="isAdmin()">
+          <td >
             <button v-on:click="deletePlant(plant.id)">Delete</button>
           </td>
         </tr>
