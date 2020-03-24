@@ -1,27 +1,13 @@
 <template>
   <div id="plants">
-    <h2>Plants</h2>
-    <p>A collection of all plants currently stored in the homesteader's workbook. Feel free to peruse.</p>
+    <h2>Your Seed Chest</h2>
+    <p>A collection of plants currently stored in your homesteader's workbook.</p>
     <hr />
-    
-    <form id="AddForm">
-      <h3>Add</h3>
-      <input
-        type="text"
-        id="add-name"
-        v-model="addPlant.name"
-        name="name"
-        placeholder="New Plant name"
-      />
-      <input
-        type="text"
-        id="add-description"
-        v-model="addPlant.description"
-        name="description"
-        placeholder="New Description"
-      />
-      <input type="button" value="Add" v-on:click="saveNew(addPlant)" />
-    </form>
+    <add-plant-component
+     v-bind:uri="uri"
+      v-on:save-add-return="saveAddReturn"
+    ></add-plant-component>
+
     <div id="editForm" v-if="editPlant != null">
       <h3>Edit</h3>
       <form id="EditForm" onsubmit="updateItem()">
@@ -41,8 +27,8 @@
         <th>Description</th>
         <th>Yield Type</th>
         <th>Plant Group</th>
-        <th ></th>
-        <th ></th>
+        <th></th>
+        <th></th>
       </tr>
       <tbody>
         <tr v-for="plant in plants" v-bind:key="plant.id">
@@ -52,10 +38,10 @@
           <td>
             <p v-if="plant.plantGroup !== null">{{plant.plantGroup.name}}</p>
           </td>
-          <td >
+          <td>
             <button v-on:click="displayEditForm(plant)">Edit</button>
           </td>
-          <td >
+          <td>
             <button v-on:click="deletePlant(plant.id)">Delete</button>
           </td>
         </tr>
@@ -66,7 +52,9 @@
 
 <script>
 import { config } from "./js/config";
-import { getAccessToken, isAdmin } from './js/auth';
+import { getAccessToken } from "./js/auth";
+import addPlantComponent from "./components/Plants/addPlantComponent";
+
 export default {
   name: "plants",
   data() {
@@ -74,24 +62,26 @@ export default {
       plants: {},
       uri: config.apiURL + "/api/plants",
       editPlant: null,
-      addPlant: {},
       errorMessage: ""
     };
+  },
+  components: {
+    "add-plant-component": addPlantComponent
   },
   computed: {
     counterText: function() {
       return (
-        this.plants.length + (this.plants.length > 1 ? " plants" : " plant")
+        this.plants.length +
+        (this.plants.length > 1
+          ? " plants in your seed chest"
+          : " plant in your seed chest")
       );
     }
   },
   methods: {
-    isAdmin: function(){
-      return isAdmin();
-    },
     GetContent: function() {
       fetch(this.uri, {
-        headers:{
+        headers: {
           Authorization: `Bearer ${getAccessToken()}`
         }
       })
@@ -104,7 +94,7 @@ export default {
     },
     displayEditForm: function(data) {
       this.editPlant = {};
-       for (var key in data){
+      for (var key in data) {
         this.editPlant[key] = data[key];
       }
     },
@@ -126,27 +116,13 @@ export default {
         })
         .catch(error => console.error("Unable to update item.", error));
     },
-    saveNew: function(plant) {
-      fetch(this.uri, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getAccessToken()}`
-        },
-        body: JSON.stringify(plant)
-      })
-        .then(response => response.json())
-        .then(savedplant => {
-          this.plants.push(savedplant);
-          this.addPlant = {};
-        })
-        .catch(error => console.error("Unable to add item.", error));
+    saveAddReturn: function(savedplant) {
+      this.plants.push(savedplant);
     },
     deletePlant: function(id) {
       fetch(`${this.uri}/${id}`, {
         method: "DELETE",
-        headers:{
+        headers: {
           Authorization: `Bearer ${getAccessToken()}`
         }
       })

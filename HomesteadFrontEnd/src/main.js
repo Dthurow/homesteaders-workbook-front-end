@@ -12,10 +12,9 @@ import { requireAuth } from './js/auth';
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/allplants', component: Plants },
+  { path: '/plants', component: Plants, beforeEnter: requireAuth, },
   { path: '/gardens', component: Gardens, beforeEnter: requireAuth, },
   { path: '/garden/:id', component: Garden, props: true, beforeEnter: requireAuth, },
-  { path: '/plants/:id', component: PersonPlants, props: true, beforeEnter: requireAuth, },
   { path: '/callback', component: Callback },
   { path: '/', component: Home },
 ]

@@ -5,8 +5,7 @@
   <div class="headerBar">
     <div style="flex:1 1 auto;"> 
       <router-link to="/">Home</router-link>
-      <router-link to="/allplants"> Plants</router-link>
-      <router-link v-show="isLoggedIn()" to="/plants/1">Your Plants</router-link>
+      <router-link v-show="isLoggedIn()" to="/plants"> Plants</router-link>
       <router-link v-show="isLoggedIn()" to="/gardens">Your Gardens</router-link>
     </div>
   <div class="loggedInInfo" v-show="isLoggedIn()">
