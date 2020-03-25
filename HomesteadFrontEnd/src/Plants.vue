@@ -3,21 +3,13 @@
     <h2>Your Seed Chest</h2>
     <p>A collection of plants currently stored in your homesteader's workbook.</p>
     <hr />
-    <add-plant-component
-     v-bind:uri="uri"
-      v-on:save-add-return="saveAddReturn"
-    ></add-plant-component>
+    <add-plant-component v-bind:uri="uri" v-on:save-add-return="saveAddReturn"></add-plant-component>
 
-    <div id="editForm" v-if="editPlant != null">
-      <h3>Edit</h3>
-      <form id="EditForm" onsubmit="updateItem()">
-        <input type="hidden" name="ID" v-model="editPlant.id" id="edit-id" />
-        <input type="text" name="name" v-model="editPlant.name" id="edit-name" />
-        <input type="text" name="description" v-model="editPlant.description" id="edit-description" />
-        <input type="button" value="Save" v-on:click="saveEdit(editPlant)" />
-        <a v-on:click="editPlant = null" aria-label="Close">&#10006;</a>
-      </form>
-    </div>
+    <edit-plant-component
+      v-bind:uri="uri"
+      v-bind:edit-plant="editPlant"
+      v-on:save-edit-return="saveEditReturn"
+    ></edit-plant-component>
 
     <p class="errorMessage" v-if="errorMessage">{{errorMessage}}</p>
     <p id="counter">{{counterText}}</p>
@@ -25,8 +17,9 @@
       <tr>
         <th>Name</th>
         <th>Description</th>
-        <th>Yield Type</th>
+        <th>Amount</th>
         <th>Plant Group</th>
+        <th>Food Category</th>
         <th></th>
         <th></th>
       </tr>
@@ -34,9 +27,12 @@
         <tr v-for="plant in plants" v-bind:key="plant.id">
           <td>{{plant.name}}</td>
           <td>{{plant.description}}</td>
-          <td>{{plant.yieldType}}</td>
+          <td>{{plant.amount}} {{plant.amountType}}</td>
           <td>
             <p v-if="plant.plantGroup !== null">{{plant.plantGroup.name}}</p>
+          </td>
+          <td>
+            <p v-if="plant.foodCategory !== null">{{plant.foodCategory.name}}</p>
           </td>
           <td>
             <button v-on:click="displayEditForm(plant)">Edit</button>
@@ -54,6 +50,7 @@
 import { config } from "./js/config";
 import { getAccessToken } from "./js/auth";
 import addPlantComponent from "./components/Plants/addPlantComponent";
+import editPlantComponent from "./components/Plants/editPlantComponent";
 
 export default {
   name: "plants",
@@ -66,15 +63,16 @@ export default {
     };
   },
   components: {
-    "add-plant-component": addPlantComponent
+    "add-plant-component": addPlantComponent,
+    "edit-plant-component": editPlantComponent
   },
   computed: {
     counterText: function() {
       return (
         this.plants.length +
         (this.plants.length > 1
-          ? " plants in your seed chest"
-          : " plant in your seed chest")
+          ? " plant varieties in your seed chest"
+          : " plant variety in your seed chest")
       );
     }
   },
@@ -98,23 +96,12 @@ export default {
         this.editPlant[key] = data[key];
       }
     },
-    saveEdit: function(plant) {
-      fetch(this.uri + "/" + plant.id, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getAccessToken()}`
-        },
-        body: JSON.stringify(plant)
-      })
-        .then(response => response.json())
-        .then(savedPlant => {
-          let ind = this.plants.findIndex(x => x.id == plant.id);
-          this.plants[ind] = savedPlant;
-          this.editPlant = null;
-        })
-        .catch(error => console.error("Unable to update item.", error));
+    saveEditReturn: function(savedPlant) {
+      console.log("plant is:");
+      console.log(savedPlant);
+      let ind = this.plants.findIndex(x => x.id == savedPlant.id);
+      this.plants[ind] = savedPlant;
+      this.editPlant = null;
     },
     saveAddReturn: function(savedplant) {
       this.plants.push(savedplant);
