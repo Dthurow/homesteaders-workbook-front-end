@@ -30,6 +30,7 @@
             v-bind:value="plantGroup.id"
           >{{plantGroup.name}}</option>
         </select>
+        <add-plant-group-component v-on:save-add-plant-group-return="saveAddPlantGroupReturn"></add-plant-group-component>
       </div>
       <div class="formInput">
         <label for="add-foodcategory">Food Category:</label>
@@ -51,16 +52,22 @@
 </template>
 
 <script>
+import { config } from "../../js/config";
 import { getAccessToken } from "../../js/auth";
 import { FoodCategories, PlantAmountTypes } from "../../js/enums";
+import addPlantGroupComponent from "./addPlantGroupComponent";
+
 export default {
   name: "addPlantComponent",
-  props: ["uri"],
+  props: ["uri", "plantGroups"],
+  components: {
+    "add-plant-group-component": addPlantGroupComponent
+  },
   data() {
     return {
       displayAddForm: false,
+      plantGroupuri: config.apiURL + "/api/plantgroups",
       addPlant: {},
-      plantGroups: null,
       foodCategories: FoodCategories,
       plantAmountTypes: PlantAmountTypes
     };
@@ -83,27 +90,17 @@ export default {
           this.displayAddForm = false;
         })
         .catch(error => console.error("Unable to add item.", error));
+    },
+    saveAddPlantGroupReturn: function(savedPlantGroup) {
+      this.$emit("save-add-plant-group-return", savedPlantGroup);
+      this.addPlant.plantGroupId = savedPlantGroup.id;
     }
-  },
-  created: function() {
-    fetch(this.uri + "/plantgroups", {
-      headers: {
-        Authorization: `Bearer ${getAccessToken()}`
-      }
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        this.plantGroups = data;
-      })
-      .catch(error => console.error("Unable to get plant groups.", error));
   }
 };
 </script>
 
 <style>
 select {
-  
   margin-top: 10px;
   margin-bottom: 10px;
 }

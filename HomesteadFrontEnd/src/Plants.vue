@@ -3,10 +3,16 @@
     <h2>Your Seed Chest</h2>
     <p>A collection of plants currently stored in your homesteader's workbook.</p>
     <hr />
-    <add-plant-component v-bind:uri="uri" v-on:save-add-return="saveAddReturn"></add-plant-component>
+    <add-plant-component
+      v-bind:uri="uri"
+      v-bind:plant-groups="plantGroups"
+      v-on:save-add-return="saveAddReturn"
+      v-on:save-add-plant-group-return="saveAddPlantGroupReturn"
+    ></add-plant-component>
 
     <edit-plant-component
       v-bind:uri="uri"
+      v-bind:plant-groups="plantGroups"
       v-bind:edit-plant="editPlant"
       v-on:save-edit-return="saveEditReturn"
     ></edit-plant-component>
@@ -59,7 +65,9 @@ export default {
       plants: {},
       uri: config.apiURL + "/api/plants",
       editPlant: null,
-      errorMessage: ""
+      errorMessage: "",
+      plantGroupuri: config.apiURL + "/api/plantgroups",
+      plantGroups: null
     };
   },
   components: {
@@ -89,6 +97,18 @@ export default {
           this.plants = data;
         })
         .catch(error => console.error("Unable to get plants.", error));
+
+      fetch(this.plantGroupuri, {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          this.plantGroups = data;
+        })
+        .catch(error => console.error("Unable to get plant groups.", error));
     },
     displayEditForm: function(data) {
       this.editPlant = {};
@@ -105,6 +125,9 @@ export default {
     },
     saveAddReturn: function(savedplant) {
       this.plants.push(savedplant);
+    },
+    saveAddPlantGroupReturn: function(savedPlantGroup) {
+      this.plantGroups.push(savedPlantGroup);
     },
     deletePlant: function(id) {
       fetch(`${this.uri}/${id}`, {
