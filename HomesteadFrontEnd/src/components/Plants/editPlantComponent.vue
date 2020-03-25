@@ -87,8 +87,10 @@ export default {
         .catch(error => console.error("Unable to update item.", error));
     },
     saveAddPlantGroupReturn: function(savedPlantGroup) {
+      console.log("emitting");
+      console.log(savedPlantGroup);
       this.$emit("save-add-plant-group-return", savedPlantGroup);
-      this.addPlant.plantGroupId = savedPlantGroup.id;
+      this.editPlant.plantGroupID = savedPlantGroup.id;
     }
   }
 };
