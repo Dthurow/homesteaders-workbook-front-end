@@ -1,44 +1,16 @@
 <template>
   <div id="gardens">
-    <h2>Gardens</h2>
+    <h2>Your Gardens</h2>
     <hr />
-    <h3>Add</h3>
-    <form id="AddForm">
-      <label for="add-name">Garden Name</label>
-      <input
-        type="text"
-        id="add-name"
-        v-model="addGarden.name"
-        name="name"
-        placeholder="New garden name"
-      />
-      <label for="add-growing-start-date">Growing Season Start Date (approximate)</label>
-      <input
-        type="date"
-        id="add-growing-start-date"
-        v-model="addGarden.growingSeasonStartDate"
-        name="growingSeasonStartDate"
-        placeholder="Growing Season Start Date"
-      />
-      <label for="add-growing-end-date">Growing Season End Date (approximate)</label>
-      <input
-        type="date"
-        id="add-growing-end-date"
-        v-model="addGarden.growingSeasonEndDate"
-        name="growingSeasonEndDate"
-        placeholder="Growing Season End Date"
-      />
-      <input type="button" value="Add" v-on:click="saveNew(addGarden)" />
-    </form>
-    <div id="editForm" v-if="editGarden != null">
-      <h3>Edit</h3>
-      <form id="EditForm">
-        <input type="hidden" name="ID" v-model="editGarden.id" id="edit-id" />
-        <input type="text" name="name" v-model="editGarden.name" id="edit-name" />
-        <input type="button" value="Save" v-on:click="saveEdit(editGarden)" />
-        <a v-on:click="editGarden = null" aria-label="Close">&#10006;</a>
-      </form>
-    </div>
+
+    <add-garden-component v-bind:uri="uri" v-on:save-add-return="saveAddReturn"></add-garden-component>
+
+   <edit-garden-component
+   v-bind:uri="uri"
+   v-bind:edit-garden="editGarden"
+    v-on:save-edit-return="saveEditReturn"
+   >
+   </edit-garden-component>
 
     <p class="errorMessage" v-if="errorMessage">{{errorMessage}}</p>
     <p id="counter">{{counterText}}</p>
@@ -71,9 +43,16 @@
 
 <script>
 import { config } from "./js/config";
-import { getAccessToken } from './js/auth';
+import { getAccessToken } from "./js/auth";
+import addGardenComponent from "./components/Gardens/addGardenComponent";
+import editGardenComponent from "./components/Gardens/editGardenComponent";
+
 export default {
   name: "gardens",
+  components: {
+    "add-garden-component": addGardenComponent,
+    "edit-garden-component": editGardenComponent
+  },
   data() {
     return {
       gardens: {},
@@ -93,7 +72,7 @@ export default {
   methods: {
     GetContent: function() {
       fetch(this.uri, {
-        headers:{
+        headers: {
           Authorization: `Bearer ${getAccessToken()}`
         }
       })
@@ -110,46 +89,22 @@ export default {
       this.editGarden.growingSeasonStartDate = data.growingSeasonStartDate;
       this.editGarden.growingSeasonEndDate = data.growingSeasonEndDate;
       this.editGarden.id = data.id;
+      this.editGarden.width = data.width;
+      this.editGarden.length = data.length;
+      this.editGarden.measurementType = data.measurementType;
     },
-    saveEdit: function(garden) {
-      fetch(this.uri + "/" + garden.id, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getAccessToken()}`
-        },
-        body: JSON.stringify(garden)
-      })
-        .then(response => response.json())
-        .then(savedgarden => {
-          let ind = this.gardens.findIndex(x => x.id == savedgarden.id);
-          this.gardens[ind] = savedgarden;
-          this.editGarden = null;
-        })
-        .catch(error => console.error("Unable to update item.", error));
+    saveEditReturn: function(savedgarden) {
+      let ind = this.gardens.findIndex(x => x.id == savedgarden.id);
+      this.gardens[ind] = savedgarden;
+      this.editGarden = null;
     },
-    saveNew: function(garden) {
-      fetch(this.uri, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getAccessToken()}`
-        },
-        body: JSON.stringify(garden)
-      })
-        .then(response => response.json())
-        .then(savedgarden => {
-          this.gardens.push(savedgarden);
-          this.addGarden = {};
-        })
-        .catch(error => console.error("Unable to add item.", error));
+    saveAddReturn: function(savedgarden) {
+      this.gardens.push(savedgarden);
     },
     deletegarden: function(id) {
       fetch(`${this.uri}/${id}`, {
         method: "DELETE",
-        headers:{
+        headers: {
           Authorization: `Bearer ${getAccessToken()}`
         }
       })

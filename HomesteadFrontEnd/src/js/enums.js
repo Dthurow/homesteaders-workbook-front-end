@@ -19,7 +19,15 @@ export const PlantAmountTypes = [
         name: "seeds"
     }
 
+];
+
+export const MeasurementTypes = [
+    { id: 0, name: "feet" },
+    { id: 1, name: "inches" },
+    { id: 2, name: "meters" },
+    { id: 3, name: "centimeters" }
 ]
+
 
 //this is a db entity so its 1-indexed
 export const FoodCategories = [
