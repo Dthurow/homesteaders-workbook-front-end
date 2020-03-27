@@ -44,7 +44,7 @@ export default {
           })
           .slice(0, 5);
         if (this.searchResultPlants.length == 0) {
-          this.errorMessage = "That plant does not exist in our system";
+          this.errorMessage = "That plant does not exist in your seed chest";
         }
       } else {
         this.searchResultPlants = [];

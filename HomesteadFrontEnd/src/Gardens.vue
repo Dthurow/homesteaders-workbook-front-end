@@ -5,12 +5,12 @@
 
     <add-garden-component v-bind:uri="uri" v-on:save-add-return="saveAddReturn"></add-garden-component>
 
-   <edit-garden-component
-   v-bind:uri="uri"
-   v-bind:edit-garden="editGarden"
-    v-on:save-edit-return="saveEditReturn"
-   >
-   </edit-garden-component>
+    <edit-garden-component
+      v-bind:uri="uri"
+      v-bind:edit-garden="editGarden"
+      v-on:save-edit-return="saveEditReturn"
+      v-on:close-edit="editGarden = null"
+    ></edit-garden-component>
 
     <p class="errorMessage" v-if="errorMessage">{{errorMessage}}</p>
     <p id="counter">{{counterText}}</p>

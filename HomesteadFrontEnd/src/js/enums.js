@@ -1,4 +1,11 @@
 
+export const PlantingTypes = [
+
+    {id:0, name:"rowFeet"},
+    {id:1, name:"individual"}
+
+];
+
 //this is a enum in code so it's 0-indexed
 export const PlantAmountTypes = [
 
@@ -18,6 +25,15 @@ export const PlantAmountTypes = [
         id: 3,
         name: "seeds"
     }
+
+];
+
+export const YieldTypes = [
+
+    { id:0, name:"Pounds"},
+    { id:1, name:"Kilograms"},
+    { id:2, name:"Bushels"},
+    { id:3, name:"Ounces"}
 
 ];
 

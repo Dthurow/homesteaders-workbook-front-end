@@ -10,7 +10,6 @@
           id="edit-name"
           v-model="editGarden.name"
           name="name"
-          placeholder="New garden name"
         />
       </div>
       <div class="formInput">
@@ -46,7 +45,7 @@
         </select>
       </div>
       <input type="button" value="Save" v-on:click="saveEdit(editGarden)" />
-      <input type="button" value="Cancel" v-on:click="editGarden = null" />
+      <input type="button" value="Cancel" v-on:click="$emit('close-edit')" />
     </form>
   </div>
 </template>
