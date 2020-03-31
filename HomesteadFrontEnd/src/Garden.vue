@@ -185,6 +185,7 @@ export default {
       this.editGardenPlant.amountPlanted = data.amountPlanted;
       this.editGardenPlant.yieldEstimatedPerAmountPlanted = data.yieldEstimatedPerAmountPlanted;
       this.editGardenPlant.yieldType = data.yieldType;
+      this.editGardenPlant.amountPlantedType = data.amountPlantedType;
       
     },
     saveEditReturn: function(savedGardenPlant) {

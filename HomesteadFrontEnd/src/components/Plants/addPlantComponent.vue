@@ -30,7 +30,9 @@
             v-bind:value="plantGroup.id"
           >{{plantGroup.name}}</option>
         </select>
-        <add-plant-group-component v-on:save-add-plant-group-return="saveAddPlantGroupReturn"></add-plant-group-component>
+
+        <router-link to="/plantgroups">Manage your plant groups</router-link>
+       
       </div>
       <div class="formInput">
         <label for="add-foodcategory">Food Category:</label>
@@ -55,14 +57,10 @@
 import { config } from "../../js/config";
 import { getAccessToken } from "../../js/auth";
 import { FoodCategories, PlantAmountTypes } from "../../js/enums";
-import addPlantGroupComponent from "./addPlantGroupComponent";
 
 export default {
   name: "addPlantComponent",
   props: ["uri", "plantGroups"],
-  components: {
-    "add-plant-group-component": addPlantGroupComponent
-  },
   data() {
     return {
       displayAddForm: false,
@@ -90,10 +88,6 @@ export default {
           this.displayAddForm = false;
         })
         .catch(error => console.error("Unable to add item.", error));
-    },
-    saveAddPlantGroupReturn: function(savedPlantGroup) {
-      this.$emit("save-add-plant-group-return", savedPlantGroup);
-      this.addPlant.plantGroupId = savedPlantGroup.id;
     }
   }
 };

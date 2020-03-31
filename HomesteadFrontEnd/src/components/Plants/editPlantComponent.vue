@@ -32,7 +32,7 @@
             v-bind:value="plantGroup.id"
           >{{plantGroup.name}}</option>
         </select>
-        <add-plant-group-component v-on:save-add-plant-group-return="saveAddPlantGroupReturn"></add-plant-group-component>
+        <router-link to="/plantgroups">Manage your plant groups</router-link>
       </div>
       <div class="formInput">
         <label for="edit-foodcategory">Food Category:</label>
@@ -54,14 +54,10 @@
 import { config } from "../../js/config";
 import { getAccessToken } from "../../js/auth";
 import { FoodCategories, PlantAmountTypes } from "../../js/enums";
-import addPlantGroupComponent from "./addPlantGroupComponent";
 
 export default {
   name: "editPlantComponent",
   props: ["uri", "editPlant", "plantGroups"],
-  components: {
-    "add-plant-group-component": addPlantGroupComponent
-  },
   data() {
     return {
        plantGroupuri: config.apiURL + "/api/plantgroups",
@@ -85,12 +81,6 @@ export default {
           this.$emit("save-edit-return", savedPlant);
         })
         .catch(error => console.error("Unable to update item.", error));
-    },
-    saveAddPlantGroupReturn: function(savedPlantGroup) {
-      console.log("emitting");
-      console.log(savedPlantGroup);
-      this.$emit("save-add-plant-group-return", savedPlantGroup);
-      this.editPlant.plantGroupID = savedPlantGroup.id;
     }
   }
 };

@@ -25,7 +25,7 @@ import { config } from "../../js/config";
 import { getAccessToken } from "../../js/auth";
 
 export default {
-  name: "addPlantComponent",
+  name: "addPlantGroupComponent",
   data() {
     return {
       displayAddForm: false,
