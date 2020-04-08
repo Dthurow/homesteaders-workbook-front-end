@@ -1,6 +1,7 @@
 <template>
   <div id="garden">
     <h2>{{garden == null ? "Garden" : garden.name}}</h2>
+        <router-link v-bind:to="'/gardens'">Return to gardens</router-link>
     <hr />
 
     <!-- Garden Info -->
@@ -8,7 +9,12 @@
       <p>Growing season: {{garden.growingSeasonStartDate}} to {{garden.growingSeasonEndDate}}</p>
       <p>Garden size: {{garden.width}}x{{garden.length}} {{garden.measurementType}}</p>
 
-      <input type="button" v-if="editGarden == null" value="Edit Garden Info" v-on:click="displayGardenEditForm(garden)" />
+      <input
+        type="button"
+        v-if="editGarden == null"
+        value="Edit Garden Info"
+        v-on:click="displayGardenEditForm(garden)"
+      />
       <edit-garden-component
         v-bind:uri="uri"
         v-bind:edit-garden="editGarden"
@@ -30,16 +36,20 @@
             <label for="add-count">Plant Count:</label>
             <input type="number" id="add-count" v-model="addGardenPlant.amountPlanted" />
             <select v-model="addGardenPlant.amountPlantedType" id="add-plantedtype">
-            <option
-              v-for="plantingType in plantingTypes"
-              v-bind:key="plantingType.id"
-              v-bind:value="plantingType.name"
-            >{{plantingType.name}}</option>
-          </select>
+              <option
+                v-for="plantingType in plantingTypes"
+                v-bind:key="plantingType.id"
+                v-bind:value="plantingType.name"
+              >{{plantingType.name}}</option>
+            </select>
           </div>
           <div class="formInput">
             <label for="add-yield">Yield Estimated:</label>
-            <input type="number" id="add-yield" v-model="addGardenPlant.yieldEstimatedPerAmountPlanted" />
+            <input
+              type="number"
+              id="add-yield"
+              v-model="addGardenPlant.yieldEstimatedPerAmountPlanted"
+            />
             <select v-model="addGardenPlant.yieldType" id="add-yieldtype">
               <option
                 v-for="yieldType in yieldTypes"
@@ -64,13 +74,12 @@
 
     <!--Edit Form -->
     <edit-garden-plant-component
-    v-bind:uri="editGardenPlant != null ? gardenPlantURI + '/' + editGardenPlant.id : ''"
+      v-bind:uri="editGardenPlant != null ? gardenPlantURI + '/' + editGardenPlant.id : ''"
       v-bind:edit-garden-plant="editGardenPlant"
+      v-bind:allow-plant-change="true"
       v-on:save-edit-garden-plant-return="saveEditReturn"
       v-on:close-edit="editGardenPlant = null"
-    >
-    </edit-garden-plant-component>
-
+    ></edit-garden-plant-component>
 
     <!-- Display Table -->
     <p class="errorMessage" v-if="errorMessage">{{errorMessage}}</p>
@@ -80,16 +89,23 @@
         <th>Name</th>
         <th>Planted</th>
         <th>Estimated Yield</th>
+        <th>Yield To Date </th>
         <th></th>
         <th></th>
       </tr>
       <tbody>
         <tr v-for="gardenPlant in gardenPlants" v-bind:key="gardenPlant.id">
-          <td>{{gardenPlant.name}}</td>
+          <td>
+            <router-link v-bind:to="'/gardenplant/' + gardenPlant.id">{{gardenPlant.name}}</router-link>
+          </td>
           <td>{{gardenPlant.amountPlanted}} {{gardenPlant.amountPlantedType}}</td>
           <td
             v-if="gardenPlant.yieldEstimatedPerAmountPlanted != null"
           >{{gardenPlant.yieldEstimatedPerAmountPlanted}} {{gardenPlant.yieldType}}</td>
+          <td v-else>-</td>
+          <td v-if="gardenPlant.currentYieldAmount">
+            {{gardenPlant.currentYieldAmount}} {{gardenPlant.yieldType}}
+          </td>
           <td v-else>-</td>
           <td>
             <button v-on:click="displayEditForm(gardenPlant)">Edit</button>
@@ -183,10 +199,10 @@ export default {
       this.editGardenPlant.id = data.id;
       this.editGardenPlant.name = data.name;
       this.editGardenPlant.amountPlanted = data.amountPlanted;
-      this.editGardenPlant.yieldEstimatedPerAmountPlanted = data.yieldEstimatedPerAmountPlanted;
+      this.editGardenPlant.yieldEstimatedPerAmountPlanted =
+        data.yieldEstimatedPerAmountPlanted;
       this.editGardenPlant.yieldType = data.yieldType;
       this.editGardenPlant.amountPlantedType = data.amountPlantedType;
-      
     },
     saveEditReturn: function(savedGardenPlant) {
       let ind = this.gardenPlants.findIndex(x => x.id == savedGardenPlant.id);

@@ -6,6 +6,7 @@ import Gardens from './Gardens.vue'
 import Home from './Home.vue'
 import Garden from './Garden.vue'
 import PlantGroups from './PlantGroups.vue'
+import GardenPlant from './GardenPlant.vue'
 import Callback from './Callback.vue'
 import { requireAuth } from './js/auth';
 
@@ -15,6 +16,7 @@ const routes = [
   { path: '/seedchest', component: Plants, beforeEnter: requireAuth, },
   { path: '/gardens', component: Gardens, beforeEnter: requireAuth, },
   { path: '/garden/:id', component: Garden, props: true, beforeEnter: requireAuth, },
+  { path: '/gardenplant/:id', component: GardenPlant, props: true, beforeEnter: requireAuth, },
   { path: '/plantgroups', component: PlantGroups, beforeEnter: requireAuth, },
   { path: '/callback', component: Callback },
   { path: '/', component: Home },

@@ -2,7 +2,7 @@
   <div v-if="editGardenPlant != null">
     <h3>Edit</h3>
     <form id="EditForm">
-      <searchPlantsComponent v-on:select-new-plant="selectNewPlant"></searchPlantsComponent>
+      <searchPlantsComponent v-if="allowPlantChange" v-on:select-new-plant="selectNewPlant"></searchPlantsComponent>
 
       <div v-if="editGardenPlant != null">
         <p>{{editGardenPlant.name}}</p>
@@ -42,7 +42,7 @@ import searchPlantsComponent from "../searchPlantsComponent";
 
 export default {
   name: "editGardenPlantComponent",
-  props: ["uri", "editGardenPlant"],
+  props: ["uri", "editGardenPlant", "allowPlantChange"],
   data() {
     return {
       yieldTypes: YieldTypes,

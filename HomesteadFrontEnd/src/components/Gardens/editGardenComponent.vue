@@ -17,7 +17,8 @@
         <input
           type="date"
           id="edit-growing-start-date"
-          v-model="editGarden.growingSeasonStartDate"
+            v-bind:value="editGarden.growingSeasonStartDate && (new Date(editGarden.growingSeasonStartDate)).toISOString().split('T')[0]"
+            v-on:input="editGarden.growingSeasonStartDate = $event.target.value"
           name="growingSeasonStartDate"
           placeholder="Growing Season Start Date"
         />
@@ -27,7 +28,9 @@
         <input
           type="date"
           id="edit-growing-end-date"
-          v-model="editGarden.growingSeasonEndDate"
+            v-bind:value="editGarden.growingSeasonEndDate && (new Date(editGarden.growingSeasonEndDate)).toISOString().split('T')[0]"
+            v-on:input="editGarden.growingSeasonEndDate = $event.target.value"
+          
           name="growingSeasonEndDate"
           placeholder="Growing Season End Date"
         />
