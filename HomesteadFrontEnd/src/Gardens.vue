@@ -14,6 +14,7 @@
 
     <p class="errorMessage" v-if="errorMessage">{{errorMessage}}</p>
     <p id="counter">{{counterText}}</p>
+    <button id="gardenFilterButton" v-on:click="displayCurrentGardens = !displayCurrentGardens" >{{displayCurrentGardens ? "View All Gardens" : "View Current Gardens"}}</button>
     <table class="displayContent">
       <tr>
         <th>Name</th>
@@ -23,7 +24,7 @@
         <th></th>
       </tr>
       <tbody>
-        <tr v-for="garden in gardens" v-bind:key="garden.id">
+        <tr v-for="garden in filteredGardens" v-bind:key="garden.id">
           <td>
             <router-link v-bind:to="'/garden/' + garden.id">{{garden.name}}</router-link>
           </td>
@@ -59,14 +60,38 @@ export default {
       uri: config.apiURL + "/api/gardens",
       editGarden: null,
       addGarden: {},
-      errorMessage: ""
+      errorMessage: "",
+      displayCurrentGardens: false
     };
   },
   computed: {
     counterText: function() {
       return (
-        this.gardens.length + (this.gardens.length > 1 ? " gardens" : " garden")
+        "Viewing " + this.filteredGardens.length + " out of " + this.gardens.length + (this.gardens.length > 1 ? " gardens" : " garden")
       );
+    },
+    filteredGardens: function(){
+      if (this.displayCurrentGardens){
+        
+        var filtered = this.gardens.filter(g=> {
+          //Start date should be this year, or at least the end date should be in the future
+          var startDate = new Date(g.growingSeasonStartDate);
+          if (startDate.getFullYear() === (new Date()).getFullYear()){
+            return true;
+          }
+          else if (g.growingSeasonEndDate){
+            var endDate = new Date(g.growingSeasonEndDate);
+            if (endDate > (new Date())){
+              return true;
+            }
+          }
+          return false;
+        });
+        return filtered
+      }
+      else{
+        return this.gardens;
+      }
     }
   },
   methods: {
@@ -132,4 +157,8 @@ export default {
 </script>
 
 <style>
+#gardenFilterButton{
+  float:right;
+  margin:10px;
+}
 </style>
