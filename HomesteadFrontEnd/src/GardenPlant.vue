@@ -7,7 +7,9 @@
     <!-- Garden plant Info -->
     <div v-if="gardenPlant != null">
       <p>Amount Planted: {{gardenPlant.amountPlanted}} {{gardenPlant.amountPlantedType}}</p>
-      <p>Yield Estimated: {{gardenPlant.yieldEstimatedPerAmountPlanted}} {{gardenPlant.yieldType}}</p>
+      <p>Estimated Yield per  {{gardenPlant.amountPlantedType}}: {{gardenPlant.yieldEstimatedPerAmountPlanted}} {{gardenPlant.yieldType}}</p>
+      <p>Estimated Total Yield: {{gardenPlant.yieldEstimatedPerAmountPlanted * gardenPlant.amountPlanted}} {{gardenPlant.yieldType}}</p>
+      <p v-if="gardenPlant.currentYieldAmount">Yield To Date: {{gardenPlant.currentYieldAmount}} {{gardenPlant.yieldType}}</p>
 
       <button v-on:click="displayGardenPlantEditForm(gardenPlant)">Edit Garden Plant</button>
       <edit-garden-plant-component
@@ -67,6 +69,7 @@
             v-model="editGardenPlantHarvest.amountHarvested"
             name="name"
           />
+          {{gardenPlant.yieldType}}
         </div>
         <div class="formInput">
           <label for="edit-growing-start-date">Harvest date:</label>
@@ -208,7 +211,7 @@ export default {
           .then(response => response.json())
           .then(savedGardenPlant => {
             this.gardenPlantHarvests.push(gardenPlantHarvest);
-            this.addGardenPlantHarvest = null;
+            this.addGardenPlantHarvest = {};
             this.displayAddForm = false;
           })
           .catch(error => console.error("Unable to add item.", error));

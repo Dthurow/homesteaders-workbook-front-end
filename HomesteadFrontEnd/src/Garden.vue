@@ -44,7 +44,7 @@
             </select>
           </div>
           <div class="formInput">
-            <label for="add-yield">Yield Estimated:</label>
+            <label for="add-yield">Yield Estimated{{addGardenPlant.amountPlantedType ? " per " + addGardenPlant.amountPlantedType : ""}}:</label>
             <input
               type="number"
               id="add-yield"
@@ -88,7 +88,7 @@
       <tr>
         <th>Name</th>
         <th>Planted</th>
-        <th>Estimated Yield</th>
+        <th>Estimated Total Yield</th>
         <th>Yield To Date </th>
         <th></th>
         <th></th>
@@ -97,11 +97,12 @@
         <tr v-for="gardenPlant in gardenPlants" v-bind:key="gardenPlant.id">
           <td>
             <router-link v-bind:to="'/gardenplant/' + gardenPlant.id">{{gardenPlant.name}}</router-link>
+            <span v-show="gardenPlant.finishedHarvesting">(finished harvesting for the season)</span>
           </td>
           <td>{{gardenPlant.amountPlanted}} {{gardenPlant.amountPlantedType}}</td>
           <td
             v-if="gardenPlant.yieldEstimatedPerAmountPlanted != null"
-          >{{gardenPlant.yieldEstimatedPerAmountPlanted}} {{gardenPlant.yieldType}}</td>
+          >{{gardenPlant.yieldEstimatedPerAmountPlanted * gardenPlant.amountPlanted}} {{gardenPlant.yieldType}}</td>
           <td v-else>-</td>
           <td v-if="gardenPlant.currentYieldAmount">
             {{gardenPlant.currentYieldAmount}} {{gardenPlant.yieldType}}
@@ -203,6 +204,7 @@ export default {
         data.yieldEstimatedPerAmountPlanted;
       this.editGardenPlant.yieldType = data.yieldType;
       this.editGardenPlant.amountPlantedType = data.amountPlantedType;
+      this.editGardenPlant.finishedHarvesting = data.finishedHarvesting;
     },
     saveEditReturn: function(savedGardenPlant) {
       let ind = this.gardenPlants.findIndex(x => x.id == savedGardenPlant.id);

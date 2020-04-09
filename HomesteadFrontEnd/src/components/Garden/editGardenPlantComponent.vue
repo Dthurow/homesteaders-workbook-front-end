@@ -9,7 +9,7 @@
         <div class="formInput">
           <label for="add-count">Plant Count:</label>
           <input type="number" id="add-count" v-model="editGardenPlant.amountPlanted" />
-           <select v-model="editGardenPlant.amountPlantedType" id="add-plantedtype">
+          <select v-model="editGardenPlant.amountPlantedType" id="add-plantedtype">
             <option
               v-for="plantingType in plantingTypes"
               v-bind:key="plantingType.id"
@@ -18,8 +18,14 @@
           </select>
         </div>
         <div class="formInput">
-          <label for="add-yield">Yield Estimated:</label>
-          <input type="number" id="add-yield" v-model="editGardenPlant.yieldEstimatedPerAmountPlanted" />
+          <label
+            for="add-yield"
+          >Yield Estimated{{editGardenPlant.amountPlantedType ? " per " + editGardenPlant.amountPlantedType : ""}}:</label>
+          <input
+            type="number"
+            id="add-yield"
+            v-model="editGardenPlant.yieldEstimatedPerAmountPlanted"
+          />
           <select v-model="editGardenPlant.yieldType" id="add-yieldtype">
             <option
               v-for="yieldType in yieldTypes"
@@ -27,6 +33,10 @@
               v-bind:value="yieldType.name"
             >{{yieldType.name}}</option>
           </select>
+        </div>
+        <div class="formInput">
+          <label for="edit-finished-harvest">Finished Harvesting?</label>
+          <input type="checkbox" v-model="editGardenPlant.finishedHarvesting" />
         </div>
       </div>
       <input type="button" value="Save" v-on:click="saveEdit(editGardenPlant)" />
