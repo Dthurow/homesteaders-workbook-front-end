@@ -1,11 +1,12 @@
 import decode from 'jwt-decode';
 import auth0 from 'auth0-js';
+import { config } from "./config";
 const ID_TOKEN_KEY = 'id_token';
 const ACCESS_TOKEN_KEY = 'access_token';
 
 const CLIENT_ID = 'YUVJyEu4uSuUgi3SRNLJaNrfUHBTQUr0';
 const CLIENT_DOMAIN = 'dev-4arbelkb.auth0.com';
-const REDIRECT = 'http://localhost:8080/callback';
+const REDIRECT = config.siteURL + '/callback';
 const SCOPE = 'openid profile email standard_user admin_user';
 const AUDIENCE = 'https://my-test-api.com';
 

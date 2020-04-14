@@ -16,5 +16,7 @@
 
 
  // listen (start app with node server.js) ======================================
- app.listen(8080);
- console.log("App listening on port 8080");
+ const PORT = process.env.PORT || 8080;
+ app.listen(PORT);
+ console.log("process env is: " + process.env.PORT);
+ console.log("App listening on port " + PORT);
