@@ -2,7 +2,6 @@
 
 export {config};
 
-const config = {
+var config = {
     "apiURL" : "https://localhost:5001",
-    "siteURL": "http://localhost:8080"
 };

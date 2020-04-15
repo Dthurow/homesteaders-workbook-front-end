@@ -6,7 +6,7 @@ const ACCESS_TOKEN_KEY = 'access_token';
 
 const CLIENT_ID = 'YUVJyEu4uSuUgi3SRNLJaNrfUHBTQUr0';
 const CLIENT_DOMAIN = 'dev-4arbelkb.auth0.com';
-const REDIRECT = config.siteURL + '/callback';
+const REDIRECT = window.location.href + 'callback';
 const SCOPE = 'openid profile email standard_user admin_user';
 const AUDIENCE = 'https://my-test-api.com';
 
