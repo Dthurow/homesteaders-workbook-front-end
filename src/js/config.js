@@ -3,5 +3,5 @@
 export {config};
 
 var config = {
-    "apiURL" : "https://localhost:5001",
+    "apiURL" : "https://obscure-lowlands-53687.herokuapp.com",
 };
