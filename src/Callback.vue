@@ -1,15 +1,27 @@
 <template>
 </template>
 <script>
-import { setIdToken, setAccessToken } from './js/auth';
+import { setIdToken, setAccessToken, getUserData, getAccessToken } from './js/auth';
+import { config } from "./js/config";
+
 export default {
   name: 'callback',
   mounted() {
     this.$nextTick(() => {
-        console.log('hi');
       setAccessToken();
       setIdToken();
-      window.location.href = '/';
+      //get user info and tell the API about a successful login:
+      var user = getUserData();
+      console.log(user);
+      fetch(config.apiURL + "/api/persons/loggedin?name=" + user.name, {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      }).then(response => window.location.href='/')
+        .catch(error =>
+          console.error("Unable finish login", error)
+        );
+
     });
   },
 };

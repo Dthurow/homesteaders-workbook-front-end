@@ -118,10 +118,11 @@ export function getUserData()
   {
     const idToken = getIdToken();
     const token = decode(idToken);
-
+    
     return {
       name: token.name,
-      picture: token.picture
+      picture: token.picture,
+      email: token.email
     };
   }
   catch (error)
