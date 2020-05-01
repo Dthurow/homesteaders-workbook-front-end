@@ -12,7 +12,7 @@
     "start": "node site.js"
   },
   "dependencies": {
-    "auth0-js": "^9.12.2",
+    "auth0-js": "^9.13.2",
     "express": "^4.17.1",
     "jwt-decode": "^2.2.0",
     "vue": "^2.5.11",
@@ -34,6 +34,6 @@
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.9.1"
+    "webpack-dev-server": "^3.1.11"
   }
 }
