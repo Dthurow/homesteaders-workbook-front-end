@@ -5,11 +5,12 @@
     <div class="headerBar">
       <div style="flex:1 1 auto;">
         <router-link to="/">Home</router-link>
-        <router-link v-show="isLoggedIn()" to="/seedchest">Seed Chest</router-link>
-        <router-link v-show="isLoggedIn()" to="/gardens">Your Gardens</router-link>
-        <router-link v-show="isLoggedIn()" to="/plantgroups">Plant Groups</router-link>
+        <router-link v-if="isLoggedIn()" to="/seedchest">Seed Chest</router-link>
+        <router-link v-if="isLoggedIn()" to="/gardens">Your Gardens</router-link>
+        <router-link v-if="isLoggedIn()" to="/plantgroups">Plant Groups</router-link>
+        <router-link to="/about">About</router-link>
       </div>
-      <div class="loggedInInfo" v-show="isLoggedIn()">
+      <div class="loggedInInfo" v-if="isLoggedIn()">
         <div class="userInfo" v-if="userInfo != null">
           <div class="userPic">
             <img v-if="userInfo.picture != null" v-bind:src="userInfo.picture" />
@@ -20,18 +21,22 @@
           <button class="logoutbutton" @click="handleLogout()">Log out</button>
         </div>
       </div>
+      <div v-else>
+        <button @click="handleLogin()">Log In</button>
+      </div>
     </div>
-    <div v-show="!isLoggedIn()" class="specialAlert">
-      <b>Want to explore this site?</b>
-      You must log in to be able to edit and create your own garden/plants/etc.
-      You don't have to create a new account, you can login with an existing Google account.
-      <br />
-      <button @click="handleLogin()">Log In</button>
-    </div>
-
+    <p>
+      <b>NOTE:</b> The homesteader's workbook is currently in
+      <b>ALPHA</b>.
+      This means a lot of the functionality is only partially implemented, or not implemented at all!
+      Feel free to poke around, but remember, all design and functionality is still subject to change!
+    </p>
+    <hr />
     <!-- route outlet -->
     <!-- component matched by the route will render here -->
-    <router-view></router-view>
+    <transition name="fade">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 

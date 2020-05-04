@@ -1,22 +1,42 @@
+:root {
+    --color-background: #EDECE8;
+    --color-background-contrast: #87A495;
+    --color-light: #e1e9ec;
+    --color-dark: #606766;
+    --color-contrast: #072c0c;
+    --color-primary: #279935;
+    --color-trans: #2799346e;
+    --color-error: red;
+  }
+
+
 body{
     font-family: Arial, Helvetica, sans-serif;
     max-width: 75%;
     margin: auto;
-    background-color: #EDECE8;
+    background-color: var(--color-background);
 }
 
 a, b{
-    color: #279935;
+    color: var(--color-primary);
+}
+
+a:hover{
+    color: var(--color-contrast);
+}
+
+a.router-link-exact-active{
+    color: var(--color-contrast);
 }
 
 .errorMessage{
-    color: red;
+    color: var(--color-error);
 }
 
 .headerBar{
     width: 100%;
     padding: 10px;
-    border: 1px solid #606766;
+    border: 1px solid var(--color-dark);
     border-radius: 10px;
     overflow: auto;
     display: flex;
@@ -34,9 +54,9 @@ a, b{
 }
 
 .specialAlert{
-    border: 1px solid #606766;
+    border: 1px solid var(--color-dark);
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--color-light);
     padding: 10px;
     margin: 10px;
 }
@@ -49,7 +69,7 @@ a, b{
 .userPic{
     width:40px;
     height:40px;
-    background-color: #EDECE8;
+    background-color: var(--color-background);
     border-radius: 50%;
     overflow: hidden;
     display:inline-block;
@@ -80,19 +100,25 @@ button, input[type=submit], input[type=button] {
     padding-top: 3px;
     padding-bottom: 3px;
     cursor: pointer;
+    background-color: var(--color-primary);
+    color: var(--color-light)
+}
+button:hover, input[type=submit]:hover, input[type=button]:hover{
+    background-color: var(--color-contrast);
+
 }
 
 .displayContent{
     border-spacing: 0px;
     min-width: 100%;
-    border: 1px solid #87A495;
+    border: 1px solid var(--color-dark);
     border-radius: 8px;;
 }
 
 .displayContent th{
     padding:10px;
     text-align: left;
-    border-bottom: 1px solid #87A495;
+    border-bottom: 1px solid var(--color-dark);
 }
 
 
@@ -101,6 +127,20 @@ button, input[type=submit], input[type=button] {
 }
 
 .displayContent tr:nth-child(even){
-    background-color: #87A495;
-    color:#EDECE8;
+    background-color: var(--color-background-contrast);
+    color:var(--color-light);
 }
+.displayContent tr:nth-child(even) a {
+    color:var(--color-contrast);
+}
+.displayContent tr:nth-child(even) a:hover{
+    color:var(--color-light);
+}
+
+/*vuejs transitions */
+.fade-enter-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }

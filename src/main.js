@@ -8,6 +8,7 @@ import Garden from './Garden.vue'
 import PlantGroups from './PlantGroups.vue'
 import GardenPlant from './GardenPlant.vue'
 import Callback from './Callback.vue'
+import About from './About.vue'
 import { requireAuth } from './js/auth';
 
 Vue.use(VueRouter)
@@ -20,6 +21,7 @@ const routes = [
   { path: '/plantgroups', component: PlantGroups, beforeEnter: requireAuth, },
   { path: '/callback', component: Callback },
   { path: '/', component: Home },
+  { path: '/about', component: About },
 ]
 
 const router = new VueRouter({
