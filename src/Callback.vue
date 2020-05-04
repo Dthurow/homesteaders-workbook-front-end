@@ -13,7 +13,7 @@ export default {
       //get user info and tell the API about a successful login:
       var user = getUserData();
       console.log(user);
-      fetch(config.apiURL + "/api/persons/loggedin?name=" + user.name, {
+      fetch(config.apiURL + "/api/persons/loggedin?name=" + encodeURIComponent(user.name), {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`
         }

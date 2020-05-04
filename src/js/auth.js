@@ -6,7 +6,7 @@ const ACCESS_TOKEN_KEY = 'access_token';
 
 const CLIENT_ID = 'YUVJyEu4uSuUgi3SRNLJaNrfUHBTQUr0';
 const CLIENT_DOMAIN = 'dev-4arbelkb.auth0.com';
-const REDIRECT = window.location.href + 'callback';
+const REDIRECT = window.location.protocol + "//" + window.location.host + '/callback';
 const SCOPE = 'openid profile email standard_user admin_user';
 const AUDIENCE = 'https://my-test-api.com';
 
@@ -36,9 +36,15 @@ export function login()
 
 export function logout()
 {
+  //clear local login info
   clearIdToken();
   clearAccessToken();
-  window.location.href = '/';
+
+  //logout of auth0 too
+  auth.logout({
+    returnTo: window.location.protocol + "//" + window.location.host,
+    client_id: CLIENT_ID
+  });
 }
 
 export function requireAuth(to, from, next)
