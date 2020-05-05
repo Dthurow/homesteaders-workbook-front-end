@@ -37,6 +37,14 @@
             <button v-on:click="deletegarden(garden.id)">Delete</button>
           </td>
         </tr>
+         <tr v-if="filteredGardens == null || filteredGardens.length == 0">
+          <td colspan="5">
+            <div class="specialAlert">
+              You don't have any gardens right now! Click the above "Add Garden" button to add one
+              
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

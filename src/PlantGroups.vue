@@ -37,6 +37,25 @@
             <button v-on:click="deletePlantGroup(plantGroup.id)">Delete</button>
           </td>
         </tr>
+        <tr v-if="plantGroups == null || plantGroups.length == 0">
+          <td colspan="5">
+            <div class="specialAlert">
+              You don't have any plant groups right now! Click the above "Add Plant Group" button to add one <br/>
+              Plant groups help you organize your plants. 
+              Suggested uses: 
+              <ul>
+                <li>grouping varieties together (e.g. a plant group called "Mint", that you use to group your peppermint and spearmint together)</li>
+                <li>
+                  grouping plant families (e.g. a plant group called "brassica", that you group your cauliflower, rutabaga and kale together)
+                </li>
+                <li>
+                  group by cold weather hardiness, personal favorites, etc!
+                  </li>
+              </ul>
+              
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

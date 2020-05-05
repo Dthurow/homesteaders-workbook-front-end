@@ -90,6 +90,7 @@
         <th>Planted</th>
         <th>Estimated Total Yield</th>
         <th>Yield To Date </th>
+        <th>Finished Harvesting</th>
         <th></th>
         <th></th>
       </tr>
@@ -108,6 +109,9 @@
             {{gardenPlant.currentYieldAmount}} {{gardenPlant.yieldType}}
           </td>
           <td v-else>-</td>
+          <td>
+            {{gardenPlant.finishedHarvesting ? "✔" : "✘"}}
+          </td>
           <td>
             <button v-on:click="displayEditForm(gardenPlant)">Edit</button>
           </td>

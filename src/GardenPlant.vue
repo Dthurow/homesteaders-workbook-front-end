@@ -9,7 +9,9 @@
       <p>Amount Planted: {{gardenPlant.amountPlanted}} {{gardenPlant.amountPlantedType}}</p>
       <p>Estimated Yield per  {{gardenPlant.amountPlantedType}}: {{gardenPlant.yieldEstimatedPerAmountPlanted}} {{gardenPlant.yieldType}}</p>
       <p>Estimated Total Yield: {{gardenPlant.yieldEstimatedPerAmountPlanted * gardenPlant.amountPlanted}} {{gardenPlant.yieldType}}</p>
+      <p> Finished Harvesting? {{gardenPlant.finishedHarvesting ? "✔" : "✘"}}</p>
       <p v-if="gardenPlant.currentYieldAmount">Yield To Date: {{gardenPlant.currentYieldAmount}} {{gardenPlant.yieldType}}</p>
+      
 
       <button v-on:click="displayGardenPlantEditForm(gardenPlant)">Edit Garden Plant</button>
       <edit-garden-plant-component

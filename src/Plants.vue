@@ -49,6 +49,14 @@
             <button v-on:click="deletePlant(plant.id)">Delete</button>
           </td>
         </tr>
+         <tr v-if="plants == null || plants.length == 0">
+          <td colspan="5">
+            <div class="specialAlert">
+              You don't have any plants right now! Click the above "Add Plant" button to add one
+              
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
