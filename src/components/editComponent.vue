@@ -20,6 +20,7 @@
 <script>
 
 import { getAccessToken } from "../js/auth";
+import logging from "../js/logging";
 
 export default {
   name: "editForm",
@@ -49,7 +50,7 @@ export default {
         .then(savededitItem => {
           this.$emit('save-edit-return', savededitItem);
         })
-        .catch(error => console.error("Unable to update item.", error));
+        .catch(error => logging.error("Unable to update item. " + error));
     }
   },
   props: ["editItem", "saveEditUrl"]

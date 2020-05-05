@@ -47,6 +47,7 @@ import { config } from "./js/config";
 import { getAccessToken } from "./js/auth";
 import addPlantGroupComponent from "./components/PlantGroups/addPlantGroupComponent";
 import editPlantGroupComponent from "./components/PlantGroups/editPlantGroupComponent";
+import logging from "./js/logging";
 
 export default {
   name: "plantGroups",
@@ -82,7 +83,7 @@ export default {
           console.log(data);
           this.plantGroups = data;
         })
-        .catch(error => console.error("Unable to get plant groups.", error));
+        .catch(error => logging.error("Unable to get plant groups. " + error));
     },
     displayEditForm: function(data) {
       this.errorMessage = "";
@@ -125,7 +126,7 @@ export default {
           this.plantGroups.splice(ind, 1);
         })
         .catch(error => {
-          console.log("Unable to delete item.", error);
+          logging.error("Unable to delete item." + error);
         });
     }
   },

@@ -9,17 +9,20 @@
         <th>Food Category</th>
         <th>Garden</th>
         <th>Estimated Total Yield</th>
-        <th>Yield To Date </th>
+        <th>Yield To Date</th>
       </tr>
       <tbody>
         <tr v-for="plant in currentGardenPlants" v-bind:key="plant.id">
-          <td><router-link v-bind:to="'/gardenplant/' + plant.id">{{plant.name}}</router-link></td>
-          <td> {{plant.amountPlanted}} {{plant.amountPlantedType}}</td>
+          <td>
+            <router-link v-bind:to="'/gardenplant/' + plant.id">{{plant.name}}</router-link>
+          </td>
+          <td>{{plant.amountPlanted}} {{plant.amountPlantedType}}</td>
           <td>{{plant.plant.foodCategory.name}}</td>
-          <td> <router-link v-bind:to="'/garden/' + plant.gardenID">{{plant.gardenName}}</router-link></td>
+          <td>
+            <router-link v-bind:to="'/garden/' + plant.gardenID">{{plant.gardenName}}</router-link>
+          </td>
           <td>{{plant.yieldEstimatedPerAmountPlanted * plant.amountPlanted}} {{plant.yieldType}}</td>
           <td>{{plant.currentYieldAmount}} {{plant.yieldType}}</td>
-          
         </tr>
       </tbody>
     </table>
@@ -29,6 +32,7 @@
 <script>
 import { config } from "../../js/config";
 import { getAccessToken } from "../../js/auth";
+import logging from "../../js/logging";
 
 export default {
   name: "gardenrollup",
@@ -39,13 +43,15 @@ export default {
       gardenPlants: []
     };
   },
-  computed:{
-      currentGardenPlants: function(){
-          return this.gardenPlants.filter(x=> { return !x.finishedHarvesting});
-      }
+  computed: {
+    currentGardenPlants: function() {
+      return this.gardenPlants.filter(x => {
+        return !x.finishedHarvesting;
+      });
+    }
   },
-  methods:{
-      GetContent: function() {
+  methods: {
+    GetContent: function() {
       fetch(this.uri, {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`
@@ -55,10 +61,13 @@ export default {
         .then(data => {
           console.log(data);
           this.gardenPlants = data;
-          
         })
-        .catch(error => console.error("Unable to get gardens.", error));
-    },
+        .catch(error =>
+          logging.error(
+            "Unable to get gardens. with URI " + this.uri + " error " + error
+          )
+        );
+    }
   },
   created: function() {
     this.GetContent();

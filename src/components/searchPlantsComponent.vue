@@ -19,6 +19,7 @@
 <script>
 import { config } from "../js/config";
 import { getAccessToken } from "../js/auth";
+import logging from "../js/logging";
 
 export default {
   name: "searchPlants",
@@ -66,7 +67,7 @@ export default {
         .then(data => {
           this.allPlants = data;
         })
-        .catch(error => console.error("Unable to get all plants.", error));
+        .catch(error => logging.error("Unable to get all plants." + error));
   }
 };
 </script>

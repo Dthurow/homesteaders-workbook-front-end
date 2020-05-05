@@ -23,6 +23,7 @@
 
 <script>
 import { getAccessToken } from "../../js/auth";
+import logging from "../../js/logging";
 
 export default {
   name: "editPlantGroupComponent",
@@ -46,7 +47,7 @@ export default {
         .then(savedPlantGroup => {
           this.$emit("save-edit-plant-group-return", savedPlantGroup);
         })
-        .catch(error => console.error("Unable to add item.", error));
+        .catch(error => logging.error("Unable to update plant group id:" + plantGroup.id + " " + error));
     }
   }
 };

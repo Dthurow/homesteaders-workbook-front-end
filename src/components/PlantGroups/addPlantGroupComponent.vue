@@ -23,6 +23,7 @@
 <script>
 import { config } from "../../js/config";
 import { getAccessToken } from "../../js/auth";
+import logging from "../../js/logging";
 
 export default {
   name: "addPlantGroupComponent",
@@ -50,7 +51,7 @@ export default {
           this.addPlantGroup = {};
           this.displayAddForm = false;
         })
-        .catch(error => console.error("Unable to add item.", error));
+        .catch(error => logging.error("Unable to add plant group." + error));
     }
   }
 };

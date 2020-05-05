@@ -49,6 +49,7 @@
 import { getAccessToken } from "../../js/auth";
 import { YieldTypes, PlantingTypes } from "../../js/enums";
 import searchPlantsComponent from "../searchPlantsComponent";
+import logging from "../../js/logging";
 
 export default {
   name: "editGardenPlantComponent",
@@ -77,7 +78,7 @@ export default {
         .then(savedGardenPlant => {
           this.$emit("save-edit-garden-plant-return", savedGardenPlant);
         })
-        .catch(error => console.error("Unable to add item.", error));
+        .catch(error => logging.error("Unable to add garden plant. " + error));
     },
     selectNewPlant: function(plant) {
       this.editGardenPlant.plantID = plant.id;

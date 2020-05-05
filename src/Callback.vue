@@ -3,6 +3,7 @@
 <script>
 import { setIdToken, setAccessToken, getUserData, getAccessToken } from './js/auth';
 import { config } from "./js/config";
+import logging from "./js/logging";
 
 export default {
   name: 'callback',
@@ -19,7 +20,7 @@ export default {
         }
       }).then(response => window.location.href='/')
         .catch(error =>
-          console.error("Unable finish login", error)
+          logging.error("Unable finish login" + error)
         );
 
     });

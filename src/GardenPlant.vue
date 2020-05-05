@@ -117,6 +117,7 @@
 import { config } from "./js/config";
 import { getAccessToken } from "./js/auth";
 import { YieldTypes } from "./js/enums";
+import logging from "./js/logging";
 import editGardenPlantComponent from "./components/Garden/editGardenPlantComponent";
 
 export default {
@@ -162,7 +163,7 @@ export default {
           this.gardenPlantHarvests = data;
         })
         .catch(error =>
-          console.error("Unable to get garden plant harvests.", error)
+          logging.error("Unable to get garden plant harvests. " + error)
         );
 
       //get garden plant info
@@ -176,7 +177,7 @@ export default {
           console.log(data);
           this.gardenPlant = data;
         })
-        .catch(error => console.error("Unable to get garden plant.", error));
+        .catch(error => logging.error("Unable to get garden plant. " + error));
     },
     displayGardenPlantEditForm: function(data) {
       this.editGardenPlant = {};
@@ -214,7 +215,7 @@ export default {
             this.addGardenPlantHarvest = {};
             this.displayAddForm = false;
           })
-          .catch(error => console.error("Unable to add item.", error));
+          .catch(error => logging.error("Unable to add item. " + error));
       }
     },
     saveEdit: function(plantHarvest) {
@@ -235,7 +236,7 @@ export default {
           this.gardenPlantHarvests[ind] = savedGardenPlantHarvest;
           this.editGardenPlantHarvest = null;
         })
-        .catch(error => console.error("Unable to add item.", error));
+        .catch(error => logging.error("Unable to add item." + error));
     },
     deleteGardenPlantHarvest: function(id) {
       fetch(`${this.uri}/${id}`, {

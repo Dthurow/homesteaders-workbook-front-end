@@ -48,7 +48,14 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     noInfo: true,
-    overlay: true
+    overlay: true,
+    before: function(app, server, compiler) {
+      //include custom logger in devserver for testing purposes
+      app.get('/logging', function(req, res) {
+        console.log("LOGGING MESSAGE: " + req.query.message);
+        res.send("done");
+      });
+    }
   },
   performance: {
     hints: false

@@ -44,6 +44,7 @@
 
 <script>
 import { config } from "./js/config";
+import logging from "./js/logging";
 import { getAccessToken } from "./js/auth";
 import addGardenComponent from "./components/Gardens/addGardenComponent";
 import editGardenComponent from "./components/Gardens/editGardenComponent";
@@ -106,7 +107,7 @@ export default {
           console.log(data);
           this.gardens = data;
         })
-        .catch(error => console.error("Unable to get gardens.", error));
+        .catch(error => logging.error("Unable to get gardens. using this uri: " + this.uri + " error was " + error));
     },
     displayEditForm: function(data) {
       this.editGarden = {};
@@ -146,7 +147,7 @@ export default {
           this.gardens.splice(ind, 1);
         })
         .catch(error => {
-          console.log("Unable to delete item.", error);
+          logging.log("Unable to delete item. " + error);
         });
     }
   },

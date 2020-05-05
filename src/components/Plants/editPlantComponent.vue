@@ -54,6 +54,7 @@
 import { config } from "../../js/config";
 import { getAccessToken } from "../../js/auth";
 import { FoodCategories, PlantAmountTypes } from "../../js/enums";
+import logging from "../../js/logging";
 
 export default {
   name: "editPlantComponent",
@@ -80,7 +81,7 @@ export default {
         .then(savedPlant => {
           this.$emit("save-edit-return", savedPlant);
         })
-        .catch(error => console.error("Unable to update item.", error));
+        .catch(error => logging.error("Unable to update plant. id:"+ plant.id + error));
     }
   }
 };

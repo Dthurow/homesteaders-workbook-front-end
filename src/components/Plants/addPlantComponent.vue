@@ -2,6 +2,10 @@
   <div id="addPlantComponent">
     <form id="AddForm" v-if="displayAddForm">
       <h3>Add</h3>
+      <div v-if="plantGroups == null || plantGroups.length == 0" class="specialAlert">
+        <b>NOTE</b> You need to create a Plant Group before creating a new plant. 
+         <router-link to="/plantgroups">Create a new plant group</router-link>
+      </div>
       <div class="formInput">
         <label for="add-name">New Plant Name:</label>
         <input type="text" id="add-name" v-model="addPlant.name" name="name" />
@@ -57,6 +61,7 @@
 import { config } from "../../js/config";
 import { getAccessToken } from "../../js/auth";
 import { FoodCategories, PlantAmountTypes } from "../../js/enums";
+import logging from "../../js/logging";
 
 export default {
   name: "addPlantComponent",
@@ -87,7 +92,7 @@ export default {
           this.addPlant = {};
           this.displayAddForm = false;
         })
-        .catch(error => console.error("Unable to add item.", error));
+        .catch(error => logging.error("Unable to add plant." + error));
     }
   }
 };

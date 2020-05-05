@@ -8,6 +8,10 @@
  
  app.use('/static', express.static('static'));
  app.use('/dist', express.static('dist'));
+app.get("/logging", function(req, res){
+    console.log("LOGGING MESSAGE: " + req.query.message);
+    res.send("done");
+});
 
  // application -------------------------------------------------------------
  app.get('*', function(req, res) {

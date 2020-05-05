@@ -36,9 +36,11 @@
           <td>{{plant.amount}} {{plant.amountType}}</td>
           <td>
             <p v-if="plant.plantGroup !== null">{{plant.plantGroup.name}}</p>
+            <p v-else-if="plant.plantGroupID !== null">{{plantGroups.find(x=> x.id == plant.plantGroupID) == null ? plantGroups : plantGroups.find(x=> x.id == plant.plantGroupID).name}} </p>
           </td>
           <td>
             <p v-if="plant.foodCategory !== null">{{plant.foodCategory.name}}</p>
+            <p v-else-if="plant.foodCategoryID !== null">{{foodCategories.find(x=> x.id == plant.foodCategoryID) == null ? foodCategories : foodCategories.find(x=> x.id == plant.foodCategoryID).name}} </p>
           </td>
           <td>
             <button v-on:click="displayEditForm(plant)">Edit</button>
@@ -57,6 +59,8 @@ import { config } from "./js/config";
 import { getAccessToken } from "./js/auth";
 import addPlantComponent from "./components/Plants/addPlantComponent";
 import editPlantComponent from "./components/Plants/editPlantComponent";
+import { FoodCategories } from "./js/enums";
+import logging from "./js/logging";
 
 export default {
   name: "plants",
@@ -67,7 +71,8 @@ export default {
       editPlant: null,
       errorMessage: "",
       plantGroupuri: config.apiURL + "/api/plantgroups",
-      plantGroups: null
+      plantGroups: null,
+      foodCategories: FoodCategories,
     };
   },
   components: {
@@ -96,7 +101,7 @@ export default {
           console.log(data);
           this.plants = data;
         })
-        .catch(error => console.error("Unable to get plants.", error));
+        .catch(error => logging.error("Unable to get plants. " + error));
 
       fetch(this.plantGroupuri, {
         headers: {
@@ -108,7 +113,7 @@ export default {
           console.log(data);
           this.plantGroups = data;
         })
-        .catch(error => console.error("Unable to get plant groups.", error));
+        .catch(error => logging.error("Unable to get plant groups. " + error));
     },
     displayEditForm: function(data) {
       this.editPlant = {};
@@ -149,7 +154,7 @@ export default {
           this.plants.splice(ind, 1);
         })
         .catch(error => {
-          console.log("Unable to delete item.", error);
+          logging.log("Unable to delete plant. id: " + id + " " + error);
         });
     }
   },

@@ -121,6 +121,7 @@
 </template>
 
 <script>
+import logging from "./js/logging";
 import { config } from "./js/config";
 import { getAccessToken } from "./js/auth";
 import { YieldTypes, MeasurementTypes, PlantingTypes } from "./js/enums";
@@ -172,11 +173,10 @@ export default {
       })
         .then(response => response.json())
         .then(data => {
-          console.log(data);
           this.gardenPlants = data.gardenPlants;
           this.garden = data;
         })
-        .catch(error => console.error("Unable to get gardens.", error));
+        .catch(error => logging.error("Unable to get gardens from URL " + this.uri + "/" + this.id + " error was: " + error));
     },
     displayGardenEditForm: function(data) {
       this.editGarden = {};
@@ -233,7 +233,7 @@ export default {
             this.plantSearchTerm = "";
             this.displayAddForm = false;
           })
-          .catch(error => console.error("Unable to add item.", error));
+          .catch(error => logging.error("Unable to add item." + error));
       }
     },
     deleteGardenPlant: function(id) {
@@ -256,7 +256,7 @@ export default {
           this.gardenPlants.splice(ind, 1);
         })
         .catch(error => {
-          console.log("Unable to delete item.", error);
+          logging.log("Unable to delete item." + error);
         });
     }
   },

@@ -10,6 +10,27 @@ import GardenPlant from './GardenPlant.vue'
 import Callback from './Callback.vue'
 import About from './About.vue'
 import { requireAuth } from './js/auth';
+import logging from './js/logging';
+
+
+//*** Error capturing and logging
+//vue specific
+Vue.config.errorHandler = (err, vm, info) => {
+  // err: error trace
+  // vm: component in which error occured
+  // info: Vue specific error information such as lifecycle hooks, events etc.
+  
+  // Perform any custom logic or log to server
+  logging.error("Uncaught Vuejs error" + err + " in " + vm + " info " + info);
+
+};
+
+//general errors
+window.onerror = function(message, source, lineno, colno, error) {
+  logging.error("General error not in vuejs " +  message + source + " Line num" + lineno + " col num " + colno + error);
+};
+
+
 
 Vue.use(VueRouter)
 

@@ -56,6 +56,7 @@
 <script>
 import { getAccessToken } from "../../js/auth";
 import { MeasurementTypes } from "../../js/enums";
+import logging from "../../js/logging";
 
 export default {
   name: "editGardenComponent",
@@ -80,7 +81,7 @@ export default {
         .then(savedgarden => {
             this.$emit("save-edit-return", savedgarden);
         })
-        .catch(error => console.error("Unable to update item.", error));
+        .catch(error => logging.error("Unable to update garden. id:"+ garden.id + " " + error));
     }
   }
 };

@@ -59,6 +59,7 @@
 <script>
 import { getAccessToken } from "../../js/auth";
 import { MeasurementTypes } from "../../js/enums";
+import logging from "../../js/logging";
 
 export default {
   name: "addGardenComponent",
@@ -87,7 +88,7 @@ export default {
           this.displayAddForm = false;
           this.$emit("save-add-return", savedgarden);
         })
-        .catch(error => console.error("Unable to add item.", error));
+        .catch(error => logging.error("Unable to add garden " + error));
     },
   }
 };

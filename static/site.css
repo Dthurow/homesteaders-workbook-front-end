@@ -58,7 +58,7 @@ a.router-link-exact-active{
     border-radius: 10px;
     background-color: var(--color-light);
     padding: 10px;
-    margin: 10px;
+    margin: 10px 10px 10px 0px;
 }
 
 .userInfo{
@@ -107,6 +107,11 @@ button:hover, input[type=submit]:hover, input[type=button]:hover{
     background-color: var(--color-contrast);
 
 }
+
+#AddForm{
+    max-width:400px;
+}
+
 
 .displayContent{
     border-spacing: 0px;
