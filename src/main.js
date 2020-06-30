@@ -9,6 +9,7 @@ import PlantGroups from './PlantGroups.vue'
 import GardenPlant from './GardenPlant.vue'
 import Callback from './Callback.vue'
 import About from './About.vue'
+import Intro from './Intro.vue'
 import { requireAuth } from './js/auth';
 import logging from './js/logging';
 
@@ -43,6 +44,7 @@ const routes = [
   { path: '/callback', component: Callback },
   { path: '/', component: Home },
   { path: '/about', component: About },
+  { path: "/intro", component: Intro}
 ]
 
 const router = new VueRouter({

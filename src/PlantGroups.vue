@@ -6,7 +6,6 @@
     <add-plant-group-component
       v-bind:uri="uri"
       v-bind:plant-groups="plantGroups"
-      v-on:save-add-return="saveAddReturn"
       v-on:save-add-plant-group-return="saveAddPlantGroupReturn"
     ></add-plant-group-component>
 
@@ -117,9 +116,6 @@ export default {
       let ind = this.plantGroups.findIndex(x => x.id == savedPlantGroup.id);
       this.plantGroups[ind] = savedPlantGroup;
       this.editPlantGroup = null;
-    },
-    saveAddReturn: function(savedplantGroup) {
-      this.plants.push(savedplantGroup);
     },
     saveAddPlantGroupReturn: function(savedPlantGroup) {
       this.plantGroups.push(savedPlantGroup);

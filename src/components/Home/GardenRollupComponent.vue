@@ -29,7 +29,7 @@
             <div class="specialAlert">
               You don't have any plants in your gardens right now!
               <br />
-              Go to <router-link v-bind:to="'/garden'">your gardens</router-link> to plant more plants!
+              Go to <router-link v-bind:to="'/gardens'">your gardens</router-link> to plant more plants!
               <br/>
               <br/>
               <b>Note</b> Sure that you have plants you're growing right now? Make sure the plants have not been listed as "finished harvesting"!

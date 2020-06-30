@@ -1,7 +1,13 @@
 <template>
   <div>
-    <p class="errorMessage" v-if="errorMessage">{{errorMessage}}</p>
     <input type="text" v-model="plantSearchTerm" placeholder="Plant Name" v-on:keyup="SearchPlants" />
+    <p class="errorMessage" v-if="notFound">That plant does not exist in your seed chest.</p>
+    <p v-if="notFound" class="specialAlert">
+      Your plant must be listed in the
+      <router-link v-bind:to="'/seedchest'">seed chest</router-link> before you can add it to your garden.
+      If you need to add a plant, go to your
+      <router-link v-bind:to="'/seedchest'">seed chest</router-link>.
+    </p>
 
     <table
       v-if="plantSearchTerm != '' && searchResultPlants != null && searchResultPlants.length > 0"
@@ -26,15 +32,15 @@ export default {
   data() {
     return {
       plantSearchTerm: "",
-      errorMessage: null,
+      notFound: false,
       allPlants: [],
       allPlantURI: config.apiURL + "/api/plants",
-      searchResultPlants:[]
+      searchResultPlants: []
     };
   },
   methods: {
     SearchPlants: function() {
-      this.errorMessage = "";
+      this.notFound = false;
       if (this.plantSearchTerm != null && this.plantSearchTerm.length > 0) {
         console.log("search plants func");
         this.searchResultPlants = this.allPlants
@@ -45,29 +51,29 @@ export default {
           })
           .slice(0, 5);
         if (this.searchResultPlants.length == 0) {
-          this.errorMessage = "That plant does not exist in your seed chest";
+          this.notFound = true;
         }
       } else {
         this.searchResultPlants = [];
       }
     },
-    SelectPlant: function(plant){
-        this.plantSearchTerm = "";
-        this.$emit('select-new-plant', plant)
+    SelectPlant: function(plant) {
+      this.plantSearchTerm = "";
+      this.$emit("select-new-plant", plant);
     }
   },
   props: [],
-  created: function(){
-      fetch(this.allPlantURI, {
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`
-        }
+  created: function() {
+    fetch(this.allPlantURI, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.allPlants = data;
       })
-        .then(response => response.json())
-        .then(data => {
-          this.allPlants = data;
-        })
-        .catch(error => logging.error("Unable to get all plants." + error));
+      .catch(error => logging.error("Unable to get all plants." + error));
   }
 };
 </script>
