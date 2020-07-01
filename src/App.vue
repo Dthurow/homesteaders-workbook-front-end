@@ -5,9 +5,9 @@
     <div class="headerBar">
       <div style="flex:1 1 auto;">
         <router-link to="/">Home</router-link>
-        <router-link v-if="isLoggedIn()" to="/seedchest">Seed Chest</router-link>
-        <router-link v-if="isLoggedIn()" to="/gardens">Your Gardens</router-link>
-        <router-link v-if="isLoggedIn()" to="/plantgroups">Plant Groups</router-link>
+        <router-link v-if="isLoggedIn()" :to="{ name: 'seedchest'}">Seed Chest</router-link>
+        <router-link v-if="isLoggedIn()" :to="{ name: 'gardens'}">Your Gardens</router-link>
+        <router-link v-if="isLoggedIn()" :to="{ name: 'plantgroups'}">Plant Groups</router-link>
         <router-link to="/about">About</router-link>
       </div>
       <div class="loggedInInfo" v-if="isLoggedIn()">
@@ -31,6 +31,9 @@
       This means a lot of the functionality is only partially implemented, or not implemented at all!
       Feel free to poke around, but remember, all design and functionality is still subject to change!
     </p>
+    <div class="specialAlert" v-if="isLoggedIn() && displayIntro">
+      <b>New to the Homesteader's Workbook?</b> Go through the <router-link v-bind:to="{name: 'intro'}">Intro</router-link> to learn more about what it can do!
+    </div>
     <hr />
     <!-- route outlet -->
     <!-- component matched by the route will render here -->
@@ -52,6 +55,13 @@ export default {
   created: function() {
     if (isLoggedIn() && this.userInfo == null) {
       this.getUserData();
+    }
+  },
+  computed: {
+    displayIntro: function() {
+      return (
+        true
+      );
     }
   },
   methods: {

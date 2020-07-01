@@ -36,15 +36,15 @@ window.onerror = function(message, source, lineno, colno, error) {
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/seedchest', component: Plants, beforeEnter: requireAuth, },
-  { path: '/gardens', component: Gardens, beforeEnter: requireAuth, },
-  { path: '/garden/:id', component: Garden, props: true, beforeEnter: requireAuth, },
-  { path: '/gardenplant/:id', component: GardenPlant, props: true, beforeEnter: requireAuth, },
-  { path: '/plantgroups', component: PlantGroups, beforeEnter: requireAuth, },
+  { path: '/seedchest', name: "seedchest", component: Plants, beforeEnter: requireAuth },
+  { path: '/gardens', name: "gardens", component: Gardens, beforeEnter: requireAuth, },
+  { path: '/garden/:id', name: "garden", component: Garden, props: true, beforeEnter: requireAuth, },
+  { path: '/gardenplant/:id', name: "gardenplant", component: GardenPlant, props: true, beforeEnter: requireAuth, },
+  { path: '/plantgroups', name:"plantgroups", component: PlantGroups, beforeEnter: requireAuth, },
   { path: '/callback', component: Callback },
   { path: '/', component: Home },
-  { path: '/about', component: About },
-  { path: "/intro", component: Intro}
+  { path: '/about', name:"about", component: About },
+  { path: "/intro", name:"intro", component: Intro}
 ]
 
 const router = new VueRouter({
