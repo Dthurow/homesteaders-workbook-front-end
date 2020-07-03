@@ -32,7 +32,10 @@
       Feel free to poke around, but remember, all design and functionality is still subject to change!
     </p>
     <div class="specialAlert" v-if="isLoggedIn() && displayIntro">
-      <b>New to the Homesteader's Workbook?</b> Go through the <router-link v-bind:to="{name: 'intro'}">Intro</router-link> to learn more about what it can do!
+      <b>New to the Homesteader's Workbook?</b> Go through the
+      <router-link v-bind:to="{name: 'intro'}">Intro</router-link>
+to learn more about what it can do!
+      <div style="float: right;cursor: pointer;" @click="closeIntro()">✘</div>
     </div>
     <hr />
     <!-- route outlet -->
@@ -49,22 +52,26 @@ export default {
   name: "app",
   data() {
     return {
-      userInfo: null
+      userInfo: null,
+      displayIntro: true
     };
   },
   created: function() {
     if (isLoggedIn() && this.userInfo == null) {
       this.getUserData();
     }
-  },
-  computed: {
-    displayIntro: function() {
-      return (
-        true
-      );
-    }
+    this.displayIntro = (document.cookie.indexOf("closedIntro") == -1);
   },
   methods: {
+    closeIntro() {
+      this.displayIntro = false;
+      if (document.cookie.indexOf("closedIntro") == -1) {
+        document.cookie =
+          "closedIntro=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+      } else {
+        console.log("cookie already exists");
+      }
+    },
     handleLogin() {
       login();
       console.log("after login");
