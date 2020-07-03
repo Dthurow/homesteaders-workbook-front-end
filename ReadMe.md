@@ -1,5 +1,6 @@
 # Homesteader's Workbook Front End
-A front-end for the Homesteader's Workbook API, to let end-users create, organize, and plan gardens based on who they're trying to feed (or other reasons) 
+A front-end for the Homesteader's Workbook API, to let end-users create, organize, and plan gardens based on who they're trying to feed (or other reasons).
+Current Alpha site at http://homesteadersworkbook.com/
 
 
 ## Functionality
@@ -10,17 +11,17 @@ List of functionality this website supports.
 #### Garden Planning
 * add/edit/delete plants
 * add/edit/delete gardens
+* If no garden plants related to a plant in the workbook, allow the deletion of the plant
+* Add/edit garden plants to gardens that a person owns
+* Add/edit a plant group to the workbook
 
 #### Maximizing feeding people
 
 ### Need To Be Done
 
 #### Garden Planning
-* If no garden plants related to a plant in the workbook, allow the deletion of the plant
 * Have gardens be owned by a person
-* Add/edit garden plants to gardens that a person owns
 * Can move garden plants to different gardens that a person owns
-* Add/edit a plant group to the workbook
 * add/move plants into plant groups in the workbook
 
 #### Maximizing feeding people
@@ -37,8 +38,8 @@ List of functionality this website supports.
 * Create readme with functionality list and tech TO-DOs
 * created functional webpack and package config files, use npm/webpack to transpile Vue to javascript
 * transfered home, gardens, and plants pages to VueJS equivalant
-
-
-### Need to be done
 * create server side code to serve up static files (nodejs express?)
 * Complete transfer to VueJS site
+
+### Need to be done
+* spin up javascript testing framework
