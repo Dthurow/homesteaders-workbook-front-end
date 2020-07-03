@@ -67,7 +67,7 @@
       <p>
         If you'd like to create more Plant Groups, click on "Plant Groups" in the menu bar at the top of the page,
         or click on the words
-        <router-link v-bind:to="{name: 'plantgroups'}">Plant Group</router-link>to go there directly.
+        <router-link v-bind:to="{name: 'plantgroups'}">Plant Group</router-link> to go there directly.
       </p>
       <div class="specialAlert">
         Plant group Name: {{plantGroups[0].name}}
@@ -112,10 +112,50 @@
           Now that you've created your first Plant and Plant Group, we can move on to the next important section of the
           Homesteader's Workbook: The Garden!
         </p>
-        <h2>The Garden</h2>
+        <h2>The Gardens</h2>
         <p>
-          <b>TODO</b>
+          The gardens are where you, well, garden. You can organize your planted plants by what garden you put them in.
+          In this way you can track your herb garden, veggie garden, etc. in separate areas. This can help later when
+          you're entering harvest data. You don't have to scroll through every plant you have planted in order to find
+          the ones you harvested from. You may also want to plant the same plant in different garden locations, and this
+          lets you do it!
         </p>
+        <p>
+          If you only have one garden, or don't really care about organizing your plants this way, you can always just
+          create a single garden that contains all plants you planted for a given growing season.
+        </p>
+        <p>
+          So let's create our first garden! Click the "Add Garden" button below and fill out the info. It's pretty simple
+          info you need: The garden name, the growing season it's for (just guess if you're not sure, you can always change
+          it later), and the size of your garden.
+        </p>
+        <add-garden-component
+          v-if="gardens.length == 0"
+          v-bind:uri="gardensURI"
+          v-on:save-add-return="saveAddGardensReturn"
+        ></add-garden-component>
+
+        <div v-if="gardens.length > 0">
+          <p>
+            <b>Congrats on adding your first Garden!</b>
+          </p>
+          <div class="specialAlert">Garden Name: {{gardens[0].name}}</div>
+
+          <p>
+            Gardens can be viewed by going to the
+            <router-link v-bind:to="{name: 'gardens'}">Your Gardens</router-link> link in the menu bar at the top of the page. You can then
+            click on a specific garden in the list to see the plants inside your garden.
+          </p>
+
+          <h3>Garden Plants</h3>
+          <p> 
+            We can finally get to the good stuff: planting your plants! With your first garden created, and plants
+            in your seed chest, you can go to your individual garden and start planting plants. Since we're walking
+            through an intro, lets add some of the {{plants[0].name}} plants into your {{gardens[0].name}} garden.
+            </p>
+
+
+        </div>
       </div>
     </div>
   </div>
@@ -126,6 +166,7 @@
 import { config } from "./js/config";
 import addPlantGroupComponent from "./components/PlantGroups/addPlantGroupComponent";
 import addPlantComponent from "./components/Plants/addPlantComponent";
+import addGardenComponent from "./components/Gardens/addGardenComponent";
 import { getAccessToken } from "./js/auth";
 
 export default {
@@ -134,13 +175,16 @@ export default {
     return {
       plantgroupURI: config.apiURL + "/api/plantgroups",
       plantURI: config.apiURL + "/api/plants",
+      gardensURI: config.apiURL + "/api/gardens",
       plantGroups: [],
-      plants: []
+      plants: [],
+      gardens: []
     };
   },
   components: {
     "add-plant-group-component": addPlantGroupComponent,
-    "add-plant-component": addPlantComponent
+    "add-plant-component": addPlantComponent,
+    "add-garden-component": addGardenComponent
   },
   methods: {
     GetContent: function() {
@@ -151,7 +195,6 @@ export default {
       })
         .then(response => response.json())
         .then(data => {
-          console.log(data);
           this.plantGroups = data;
         })
         .catch(error => logging.error("Unable to get plant groups. " + error));
@@ -163,16 +206,36 @@ export default {
       })
         .then(response => response.json())
         .then(data => {
-          console.log(data);
           this.plants = data;
         })
         .catch(error => logging.error("Unable to get plants. " + error));
+
+      fetch(this.gardensURI, {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.gardens = data;
+        })
+        .catch(error =>
+          logging.error(
+            "Unable to get gardens. using this uri: " +
+              this.gardensURI +
+              " error was " +
+              error
+          )
+        );
     },
     saveAddReturn: function(savedplant) {
       this.plants.push(savedplant);
     },
     saveAddPlantGroupReturn: function(savedPlantGroup) {
       this.plantGroups.push(savedPlantGroup);
+    },
+    saveAddGardensReturn: function(savedgarden) {
+      this.gardens.push(savedgarden);
     }
   },
   created: function() {
