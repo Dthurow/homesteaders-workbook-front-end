@@ -61,35 +61,62 @@
     ></add-plant-group-component>
 
     <div v-if="plantGroups.length > 0">
-      <p><b>Congrats on adding your first Plant Group!</b></p>
+      <p>
+        <b>Congrats on adding your first Plant Group!</b>
+      </p>
+      <p>
+        If you'd like to create more Plant Groups, click on "Plant Groups" in the menu bar at the top of the page,
+        or click on the words
+        <router-link v-bind:to="{name: 'plantgroups'}">Plant Group</router-link>to go there directly.
+      </p>
       <div class="specialAlert">
-        Plant group Name: {{plantGroups[0].name}} <br/>
+        Plant group Name: {{plantGroups[0].name}}
+        <br />
         Plant group Description: {{plantGroups[0].description}}
       </div>
-      <p>Now that you've added your first Plant Group, you can add your first plant! Click below to fill in the info
-        for your new plant. If we're continuing the example earlier, put in "Cherry Tomato" as the name, with whatever
-        description you want. The Amount is a number, with a dropdown that lets you choose different units (e.g. milligrams).
+      <p>
+        Now that you've added your first Plant Group, you can add your first plant! This plant will be stored in your
+        <router-link v-bind:to="{name: 'seedchest'}">seed chest</router-link>. And you'll be able to look at it or
+        edit it later there. Having your plants in your seed chest is important because you wont be able to add any
+        plants to your garden that you haven't added to your seed chest first.
+      </p>
+      <p>
+        <b>NOTE:</b> Post-Alpha, the plan is if you already have a list of your plants elsewhere, you'll be able to upload
+        them and automatically create plants in your seed chest. This functionality has not been created yet, however.
+      </p>
+      <p v-if="plants.length == 0">
+        Click below to fill in the info for your new plant. If we're continuing the example earlier,
+        put in "Cherry Tomato" as the name, with whatever description you want. The Amount is a
+        number, with a dropdown that lets you choose different units (e.g. milligrams).
         Set the Plant Group you made, and Food Category, then click Add!
       </p>
 
-     <add-plant-component v-if="plants.length == 0"
-      v-bind:uri="plantURI"
-      v-bind:plant-groups="plantGroups"
-      v-on:save-add-return="saveAddReturn"
-      v-on:save-add-plant-group-return="saveAddPlantGroupReturn"
-    ></add-plant-component>
+      <add-plant-component
+        v-if="plants.length == 0"
+        v-bind:uri="plantURI"
+        v-bind:plant-groups="plantGroups"
+        v-on:save-add-return="saveAddReturn"
+        v-on:save-add-plant-group-return="saveAddPlantGroupReturn"
+      ></add-plant-component>
 
-    <div v-if="plants.length > 0">
-      <p><b>Congrats on adding your first Plant!</b></p>
-    <p>
-      Now that you've created your first Plant and Plant Group, we can move onto the next important section of the
-      Homesteader's Workbook: The Garden!
-      </p>
-      <h2>The Garden</h2>
-      <p>
-        <b>TODO</b>
+      <div v-if="plants.length > 0">
+        <p>
+          <b>Congrats on adding your first Plant!</b>
         </p>
-    </div>
+        <div class="specialAlert">
+          Plant Name: {{plants[0].name}}
+          <br />
+          Plant Description: {{plants[0].description}}
+        </div>
+        <p>
+          Now that you've created your first Plant and Plant Group, we can move on to the next important section of the
+          Homesteader's Workbook: The Garden!
+        </p>
+        <h2>The Garden</h2>
+        <p>
+          <b>TODO</b>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -129,7 +156,7 @@ export default {
         })
         .catch(error => logging.error("Unable to get plant groups. " + error));
 
-        fetch(this.plantURI, {
+      fetch(this.plantURI, {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`
         }
