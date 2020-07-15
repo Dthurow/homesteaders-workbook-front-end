@@ -107,7 +107,7 @@
             <button v-on:click="displayGardenPlantHarvestEditForm(gardenPlantHarvest)">Edit</button>
           </td>
           <td>
-            <button v-on:click="deleteGardenPlant(gardenPlantHarvest.id)">Delete</button>
+            <button v-on:click="deleteGardenPlantHarvest(gardenPlantHarvest.id)">Delete</button>
           </td>
         </tr>
       </tbody>
