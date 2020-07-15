@@ -67,13 +67,14 @@
       <p>
         If you'd like to create more Plant Groups, click on "Plant Groups" in the menu bar at the top of the page,
         or click on the words
-        <router-link v-bind:to="{name: 'plantgroups'}">Plant Group</router-link> to go there directly.
+        <router-link v-bind:to="{name: 'plantgroups'}">Plant Group</router-link>&nbsp;to go there directly.
       </p>
       <div class="specialAlert">
         Plant group Name: {{plantGroups[0].name}}
         <br />
         Plant group Description: {{plantGroups[0].description}}
       </div>
+      <h3>Plant</h3>
       <p>
         Now that you've added your first Plant Group, you can add your first plant! This plant will be stored in your
         <router-link v-bind:to="{name: 'seedchest'}">seed chest</router-link>. And you'll be able to look at it or
@@ -113,6 +114,7 @@
           Homesteader's Workbook: The Garden!
         </p>
         <h2>The Gardens</h2>
+        <h3>Garden</h3>
         <p>
           The gardens are where you, well, garden. You can organize your planted plants by what garden you put them in.
           In this way you can track your herb garden, veggie garden, etc. in separate areas. This can help later when
@@ -143,18 +145,58 @@
 
           <p>
             Gardens can be viewed by going to the
-            <router-link v-bind:to="{name: 'gardens'}">Your Gardens</router-link> link in the menu bar at the top of the page. You can then
+            <router-link v-bind:to="{name: 'gardens'}">Your Gardens</router-link>&nbsp;link in the menu bar at the top of the page. You can then
             click on a specific garden in the list to see the plants inside your garden.
           </p>
 
           <h3>Garden Plants</h3>
-          <p> 
+          <p>
             We can finally get to the good stuff: planting your plants! With your first garden created, and plants
             in your seed chest, you can go to your individual garden and start planting plants. Since we're walking
             through an intro, lets add some of the {{plants[0].name}} plants into your {{gardens[0].name}} garden.
+          </p>
+          <p>
+            When you first click the "Add Plant To My Garden", you're presented with a search box. You can start typing
+            the plant that you added to your seed chest, and it will appear in a list below the box. Select that plant,
+            and then enter how much you're planting, and how much you hope to harvest from the plant.
+          </p>
+          <p>
+            When selecting how much you're planting, you can choose either listing per linear foot, or per individual
+            plant. So if you're planting a 20 foot row or 3 plants, you'll be able to track it.
+            Based on which way you're tracking how much, the yield you enter should be either per linear foot or
+            individual plant. In the future, you'll be able to see how much you harvested in previous years, and your
+            yield estimate will become more accurate. For now, however, you'll have to guess and refine it as you go.
+            If you research your particular varieties online, you can often find rough yield estimates that you can then
+            add here.
+          </p>
+
+          <add-garden-plant-component
+            v-if="gardenPlants.length == 0"
+            v-bind:uri="gardenPlantURI"
+            v-bind:garden="garden"
+            v-on:save-add-garden-plant-return="saveGardenPlantAddReturn"
+          ></add-garden-plant-component>
+
+          <div v-if="gardenPlants.length > 0">
+            <p>
+              <b>Congrats on adding your first Garden Plant!</b>
             </p>
+            <div class="specialAlert">
+              Garden Plant Name: {{gardenPlants[0].name}}
+              <br />
+              Amount Planted: {{gardenPlants[0].amountPlanted}} {{gardenPlants[0].amountPlantedType}}
+              <br />
+
+              Estimated Yield Per {{gardenPlants[0].amountPlantedType}}: {{gardenPlants[0].yieldEstimatedPerAmountPlanted}} {{gardenPlants[0].yieldType}}
+            </div>
+
+            <h3>Harvests</h3>
+            <p>
+              TODO
+              </p>
 
 
+          </div>
         </div>
       </div>
     </div>
@@ -167,6 +209,7 @@ import { config } from "./js/config";
 import addPlantGroupComponent from "./components/PlantGroups/addPlantGroupComponent";
 import addPlantComponent from "./components/Plants/addPlantComponent";
 import addGardenComponent from "./components/Gardens/addGardenComponent";
+import addGardenPlantComponent from "./components/Garden/addGardenPlantComponent";
 import { getAccessToken } from "./js/auth";
 
 export default {
@@ -176,15 +219,19 @@ export default {
       plantgroupURI: config.apiURL + "/api/plantgroups",
       plantURI: config.apiURL + "/api/plants",
       gardensURI: config.apiURL + "/api/gardens",
+      gardenPlantURI: config.apiURL + "/api/gardenplants",
       plantGroups: [],
       plants: [],
-      gardens: []
+      gardens: [],
+      garden: {},
+      gardenPlants: []
     };
   },
   components: {
     "add-plant-group-component": addPlantGroupComponent,
     "add-plant-component": addPlantComponent,
-    "add-garden-component": addGardenComponent
+    "add-garden-component": addGardenComponent,
+    "add-garden-plant-component": addGardenPlantComponent
   },
   methods: {
     GetContent: function() {
@@ -218,6 +265,8 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.gardens = data;
+          this.garden = this.gardens[0];
+          this.gardenPlants = this.garden.gardenPlants;
         })
         .catch(error =>
           logging.error(
@@ -236,6 +285,10 @@ export default {
     },
     saveAddGardensReturn: function(savedgarden) {
       this.gardens.push(savedgarden);
+      this.garden = savedgarden;
+    },
+    saveGardenPlantAddReturn: function(savedgardenplant) {
+      this.gardenPlants.push(savedgardenplant);
     }
   },
   created: function() {
