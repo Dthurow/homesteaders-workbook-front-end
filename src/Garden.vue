@@ -25,59 +25,18 @@
 
     <hr />
     <!-- Add Form -->
-    <div v-if="displayAddForm">
-      <h3>Add Plant to {{garden == null ? "Garden" : garden.name}}</h3>
-      <form id="AddForm">
-        <searchPlantsComponent v-on:select-new-plant="selectNewPlant"></searchPlantsComponent>
-
-        <div v-if="addGardenPlant != null">
-          <p>{{addGardenPlant.name}}</p>
-          <div class="formInput">
-            <label for="add-count">Plant Count:</label>
-            <input type="number" id="add-count" v-model="addGardenPlant.amountPlanted" />
-            <select v-model="addGardenPlant.amountPlantedType" id="add-plantedtype">
-              <option
-                v-for="plantingType in plantingTypes"
-                v-bind:key="plantingType.id"
-                v-bind:value="plantingType.name"
-              >{{plantingType.name}}</option>
-            </select>
-          </div>
-          <div class="formInput">
-            <label for="add-yield">Yield Estimated{{addGardenPlant.amountPlantedType ? " per " + addGardenPlant.amountPlantedType : ""}}:</label>
-            <input
-              type="number"
-              id="add-yield"
-              v-model="addGardenPlant.yieldEstimatedPerAmountPlanted"
-            />
-            <select v-model="addGardenPlant.yieldType" id="add-yieldtype">
-              <option
-                v-for="yieldType in yieldTypes"
-                v-bind:key="yieldType.id"
-                v-bind:value="yieldType.name"
-              >{{yieldType.name}}</option>
-            </select>
-          </div>
-        </div>
-        <input
-          v-if="addGardenPlant != null"
-          type="button"
-          value="Add"
-          v-on:click="saveNew(addGardenPlant)"
-        />
-        <input type="button" value="Cancel" v-on:click="displayAddForm = false" />
-      </form>
-    </div>
-    <div v-else>
-      <input type="button" value="Add Plant to Garden" v-on:click="displayAddForm = true" />
-    </div>
+ <add-garden-plant-component
+      v-bind:uri="gardenPlantURI"
+      v-bind:garden="garden"
+      v-on:save-add-garden-plant-return="saveGardenPlantAddReturn"
+    ></add-garden-plant-component>
 
     <!--Edit Form -->
     <edit-garden-plant-component
       v-bind:uri="editGardenPlant != null ? gardenPlantURI + '/' + editGardenPlant.id : ''"
       v-bind:edit-garden-plant="editGardenPlant"
       v-bind:allow-plant-change="true"
-      v-on:save-edit-garden-plant-return="saveEditReturn"
+      v-on:save-edit-garden-plant-return="saveGardenPlantEditReturn"
       v-on:close-edit="editGardenPlant = null"
     ></edit-garden-plant-component>
 
@@ -130,16 +89,16 @@ import { config } from "./js/config";
 import { getAccessToken } from "./js/auth";
 import { YieldTypes, MeasurementTypes, PlantingTypes } from "./js/enums";
 import searchPlantsComponent from "./components/searchPlantsComponent";
-import editComponent from "./components/editComponent";
 import editGardenComponent from "./components/Gardens/editGardenComponent";
 import editGardenPlantComponent from "./components/Garden/editGardenPlantComponent";
+import addGardenPlantComponent from "./components/Garden/addGardenPlantComponent";
 
 export default {
   components: {
     searchPlantsComponent,
-    editComponent,
     "edit-garden-component": editGardenComponent,
-    "edit-garden-plant-component": editGardenPlantComponent
+    "edit-garden-plant-component": editGardenPlantComponent,
+    "add-garden-plant-component": addGardenPlantComponent
   },
   name: "garden",
   data() {
@@ -192,13 +151,6 @@ export default {
       this.editGarden.length = data.length;
       this.editGarden.measurementType = data.measurementType;
     },
-    selectNewPlant: function(plant) {
-      this.addGardenPlant = {};
-      this.addGardenPlant.plantID = plant.id;
-      this.addGardenPlant.name = plant.name;
-      this.addGardenPlant.gardenId = this.id;
-      this.addGardenPlant.plant = plant;
-    },
     displayEditForm: function(data) {
       this.editGardenPlant = {};
       this.editGardenPlant.id = data.id;
@@ -210,7 +162,7 @@ export default {
       this.editGardenPlant.amountPlantedType = data.amountPlantedType;
       this.editGardenPlant.finishedHarvesting = data.finishedHarvesting;
     },
-    saveEditReturn: function(savedGardenPlant) {
+    saveGardenPlantEditReturn: function(savedGardenPlant) {
       let ind = this.gardenPlants.findIndex(x => x.id == savedGardenPlant.id);
       this.gardenPlants[ind] = savedGardenPlant;
       this.editGardenPlant = null;
@@ -219,26 +171,8 @@ export default {
       this.garden = savedgarden;
       this.editGarden = null;
     },
-    saveNew: function(gardenPlant) {
-      if (gardenPlant != null) {
-        fetch(this.gardenPlantURI, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${getAccessToken()}`
-          },
-          body: JSON.stringify(gardenPlant)
-        })
-          .then(response => response.json())
-          .then(savedGardenPlant => {
-            this.gardenPlants.push(gardenPlant);
-            this.addGardenPlant = null;
-            this.plantSearchTerm = "";
-            this.displayAddForm = false;
-          })
-          .catch(error => logging.error("Unable to add item." + error));
-      }
+    saveGardenPlantAddReturn: function(savedgardenplant){
+      this.gardenPlants.push(savedgardenplant);
     },
     deleteGardenPlant: function(id) {
       fetch(`${this.gardenPlantURI}/${id}`, {
