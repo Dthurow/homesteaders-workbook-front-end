@@ -26,37 +26,13 @@
     <hr />
 
     <!-- Add Form -->
-    <div v-if="displayAddForm">
-      <h3>Add</h3>
-      <form id="AddForm">
-        <div class="formInput">
-          <label for="add-harvest-amount">Amount Harvested</label>
-          <input
-            type="number"
-            id="add-harvest-amount"
-            v-model="addGardenPlantHarvest.amountHarvested"
-            name="Amount harvested"
-            placeholder="Amount harvested"
-          />
-          {{gardenPlant.yieldType}}
-        </div>
-        <div class="formInput">
-          <label for="add-harvest-date">Harvest Date</label>
-          <input
-            type="date"
-            id="add-harvest-date"
-            v-bind:value="addGardenPlantHarvest.harvestDate && (new Date(addGardenPlantHarvest.harvestDate)).toISOString().split('T')[0]"
-            v-on:input="addGardenPlantHarvest.harvestDate = $event.target.value"
-            name="harvestDate"
-          />
-        </div>
-        <input type="button" value="Add" v-on:click="saveNew(addGardenPlantHarvest)" />
-        <input type="button" value="Cancel" v-on:click="displayAddForm = false" />
-      </form>
-    </div>
-    <div v-else>
-      <input type="button" value="Add a new Harvest" v-on:click="displayAddForm = true" />
-    </div>
+    <add-harvest-component
+      v-bind:uri="uri"
+      v-bind:gardenPlant="gardenPlant"
+      v-on:save-add-harvest-return="saveaddharvestreturn"
+    >
+    </add-harvest-component>
+
 
     <!--Edit Form -->
     <div v-if="editGardenPlantHarvest">
@@ -66,7 +42,7 @@
         <div class="formInput">
           <label for="edit-name">Amount Harvested:</label>
           <input
-            type="text"
+             type="number"
             id="edit-name"
             v-model="editGardenPlantHarvest.amountHarvested"
             name="name"
@@ -121,10 +97,12 @@ import { getAccessToken } from "./js/auth";
 import { YieldTypes } from "./js/enums";
 import logging from "./js/logging";
 import editGardenPlantComponent from "./components/Garden/editGardenPlantComponent";
+import addHarvestPlantComponent from "./components/GardenPlant/addHarvestComponent";
 
 export default {
   components: {
-    "edit-garden-plant-component": editGardenPlantComponent
+    "edit-garden-plant-component": editGardenPlantComponent,
+    "add-harvest-component": addHarvestPlantComponent
   },
   name: "gardenplant",
   data() {
@@ -199,26 +177,8 @@ export default {
       this.gardenPlant = savedgardenPlant;
       this.editGardenPlant = null;
     },
-    saveNew: function(gardenPlantHarvest) {
-      if (gardenPlantHarvest != null) {
-        gardenPlantHarvest.gardenPlantID = this.id;
-        fetch(this.uri, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${getAccessToken()}`
-          },
-          body: JSON.stringify(gardenPlantHarvest)
-        })
-          .then(response => response.json())
-          .then(savedGardenPlant => {
-            this.gardenPlantHarvests.push(gardenPlantHarvest);
-            this.addGardenPlantHarvest = {};
-            this.displayAddForm = false;
-          })
-          .catch(error => logging.error("Unable to add item. " + error));
-      }
+    saveaddharvestreturn: function(savedPlantHarvest){
+      this.gardenPlantHarvests.push(savedPlantHarvest);
     },
     saveEdit: function(plantHarvest) {
       fetch(this.uri + "/" + plantHarvest.id, {
