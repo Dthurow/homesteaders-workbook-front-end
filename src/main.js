@@ -42,7 +42,7 @@ const routes = [
   { path: '/gardenplant/:id', name: "gardenplant", component: GardenPlant, props: true, beforeEnter: requireAuth, },
   { path: '/plantgroups', name:"plantgroups", component: PlantGroups, beforeEnter: requireAuth, },
   { path: '/callback', component: Callback },
-  { path: '/', component: Home },
+  { path: '/', name:"home", component: Home },
   { path: '/about', name:"about", component: About },
   { path: "/intro", name:"intro", component: Intro}
 ]

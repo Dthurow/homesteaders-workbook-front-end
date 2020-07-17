@@ -56,7 +56,7 @@
       <tbody>
         <tr v-for="gardenPlant in gardenPlants" v-bind:key="gardenPlant.id">
           <td>
-            <router-link v-bind:to="'/gardenplant/' + gardenPlant.id">{{gardenPlant.name}}</router-link>
+            <router-link :to="{ name: 'gardenplant', params: { id: gardenPlant.id }}">{{gardenPlant.name}}</router-link>
             <span v-show="gardenPlant.finishedHarvesting">(finished harvesting for the season)</span>
           </td>
           <td>{{gardenPlant.amountPlanted}} {{gardenPlant.amountPlantedType}}</td>

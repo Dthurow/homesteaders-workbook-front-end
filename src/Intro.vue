@@ -192,9 +192,35 @@
 
             <h3>Harvests</h3>
             <p>
-              TODO
+              Now that you've gotten your plants all planted, you need to start tracking the important things,
+              like how much you harvest, and when. You can add, update, or look at how much you've harvested
+              on the indvidual garden plant page. There's two ways to get to that page. On the <router-link v-bind:to="{name: 'home'}">home</router-link> page, 
+              there's a list of currently growing plants. You can click on the plant name, and you can go to 
+              the individual garden plant page. The other option is to go to <router-link v-bind:to="{name: 'gardens'}">Your Gardens</router-link>,
+              then click the garden that has the plant in it, then click the individual garden plant. For this tutorial, you
+              can look at the {{gardenPlants[0].name}} harvests by going to the <router-link :to="{ name: 'gardenplant', params: { id: gardenPlants[0].id }}">{{gardenPlants[0].name}}</router-link> page.
               </p>
-
+              <p>
+                Once there, you can click "Add a new harvest" button to track when you harvest from those plants, and how much you got.
+                You'll then be able to track how long that particular plant takes to harvest, and actual yields you can expect to get.
+                The sum total amount you harvested is rolled up and displayed on the <router-link v-bind:to="{name: 'home'}">home</router-link> page
+                in the "Currently Growing" table. This "Currently Growing" table lets you track all your currently growing plants
+                in one location, so you can easily see what's in your gardens right now and how much you've harvested from each.
+              </p>
+              <p>
+                Once you've finished harvesting everything from a particular plant (say, you pulled all your potatoes),
+                you can edit the garden plant and click the "Finished Harvesting?" box. This will make the plant no longer
+                display on the home page's "Currently Growing" page, so you can make sure to only worry about plants that
+                are growing right now.
+                </p>
+          
+            <h3>Conclusion</h3>
+            <p>
+              You've now completed the intro! You can add and track plants in your gardens, and
+              see how much you've harvested as you go. Later functionality will be added and included in this
+              intro, including the ability to add notes about your garden, and the ability to track people
+              you want to feed!
+              </p>
 
           </div>
         </div>
